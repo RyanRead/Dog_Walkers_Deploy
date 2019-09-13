@@ -21,10 +21,9 @@ def home(request):
     context = {
         'posts': posts
     }
-    return render(request, 'hello_world/home.html', context)
+    return render(request, 'dog_walker/home.html', context)
 
 def about(request):
-    return render(request, 'hello_world/about.html', {'title': 'about'})
+    return render(request, 'dog_walker/about.html', {'title': 'about'})
 
-def map(request):
-    return render(request, 'hello_world/map.html', {'title': 'map'})
+

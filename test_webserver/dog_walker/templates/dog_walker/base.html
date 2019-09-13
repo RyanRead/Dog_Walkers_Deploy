@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% if title %}
+        <title>Dog Walker - {{title}}</title>
+    {% else %}
+        <title>Dog Walker</title>
+    {% endif %}
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+ 
+</html>

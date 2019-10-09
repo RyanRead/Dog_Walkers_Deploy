@@ -11,6 +11,16 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+if os.name == 'nt':
+    import platform
+    OSGEO4W = r"C:\OSGeo4W"
+    if '64' in platform.architecture()[0]:
+        OSGEO4W += "64"
+    assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
+    os.environ['OSGEO4W_ROOT'] = OSGEO4W
+    os.environ['GDAL_DATA'] = OSGEO4W + r"\share\gdal"
+    os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
+    os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,13 +42,16 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'dog_walker.apps.DogWalkerConfig',
-    'map.apps.MapConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
+    'leaflet',
+    # 'djgeojson',
+    # 'geo',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +90,12 @@ WSGI_APPLICATION = 'test_webserver.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'dog_walker',
+        'USER': 'postgres',
+        'HOST': 'localhost',
+        'PASSWORD': 'postgres',
+        'PORT': '5433',
     }
 }
 
@@ -120,3 +137,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (50.44722980684235, -104.61782455444336),
+    'DEFAULT_ZOOM': 12,
+    'MAX_ZOOM': 18,
+    'MIN_ZOOM': 12,
+    'ATTRIBUTION_PREFIX': 'DOG WALKER',
+    'RESET_VIEW': False,
+    # 'MAX_BOUNDS': ((50.396700704675396, -104.48101043701172), (50.512771567674484, -104.732666015625)),
+}

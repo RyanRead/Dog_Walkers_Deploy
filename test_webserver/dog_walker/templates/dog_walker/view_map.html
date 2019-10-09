@@ -1,0 +1,24 @@
+{% extends "dog_walker/base.html" %}
+{% load static %}
+{% load leaflet_tags %}
+{% block content %}
+    {% leaflet_js %}
+    {% leaflet_css %}
+
+    <style type="text/css">
+        #gis {width: 800px; height: 600px;}
+    </style>
+    <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
+
+    <script type="text/javascript">
+        function add_points(map, options){
+            var datasets = new L.GeoJSON.AJAX("{% url 'poi_dataset' %}", {
+
+            });
+            datasets.addTo(map);
+        }
+    </script>
+    {% leaflet_map "gis" callback="window.add_points" %}
+<!--    <div id = "mapid" style="width: 800px; height: 600px;"> </div>-->
+
+{% endblock content %}

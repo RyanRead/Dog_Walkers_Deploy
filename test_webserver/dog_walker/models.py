@@ -12,6 +12,10 @@ class LatLngPins(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Point of Interest'
+        verbose_name_plural = 'Points of Interest'
+
 
 class DogBreeds(models.Model):
     breed_name = models.CharField(max_length=100)
@@ -22,6 +26,11 @@ class DogBreeds(models.Model):
     def __str__(self):
         return self.breed_name
 
+    class Meta:
+        verbose_name = 'Dog Breed'
+        verbose_name_plural = 'Dog Breeds'
+
+
 class Dogs(models.Model):
     user_id = models.ForeignKey(User, on_delete=False)
     dog_name = models.CharField(max_length=100)
@@ -31,4 +40,8 @@ class Dogs(models.Model):
     dog_image = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.dog_name + 'henryisgay'
+        return self.dog_name
+
+    class Meta:
+        verbose_name = 'Dog'
+        verbose_name_plural = 'Dogs'

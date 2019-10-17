@@ -1,22 +1,10 @@
 {% extends "dog_walker/base.html" %}
 {% load static %}
 {% load leaflet_tags %}
-
-{% block navbar %}
-    <li class="nav-item">
-        <a class="nav-link" href="#">Add a Point of Interest</a>
-    </li>
-   <li class="nav-item">
-        <a class="nav-link" href="#">Create Walking Route</a>
-    </li>
-
-{% endblock navbar %}
-
-
 {% block content %}
     {% leaflet_js %}
     {% leaflet_css %}
-<div class="row">
+
     <style type="text/css">
         #gis {width: 800px; height: 600px;}
     </style>
@@ -28,22 +16,11 @@
 
             });
             datasets.addTo(map);
+
+
         }
     </script>
     {% leaflet_map "gis" callback="window.add_points" %}
-
-</div>
-
-
-<div class="row">
-    <div class="col-sm-4">Select Start Location</div>
-    <div class="col-sm-4">Select Middle Locations</div>
-    <div class="col-sm-4">Select End Location</div>
-
-
-</div>
-
 <!--    <div id = "mapid" style="width: 800px; height: 600px;"> </div>-->
 
 {% endblock content %}
-

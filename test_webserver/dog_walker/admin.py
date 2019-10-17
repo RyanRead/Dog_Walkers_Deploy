@@ -17,6 +17,7 @@ class DogsAdmin(admin.ModelAdmin):
     list_display = ('id', 'dog_name')
     # pass
 
+
 admin.site.register(LatLngPins, LatLngPinsAdmin)
 admin.site.register(DogBreeds, DogBreedsAdmin)
 admin.site.register(Dogs, DogsAdmin)

@@ -43,6 +43,7 @@ Promise.prototype.then = function (onFulfilled, onRejected) {
 
   return promise;
 };
+
 function QueueItem(promise, onFulfilled, onRejected) {
   this.promise = promise;
   if (typeof onFulfilled === 'function') {

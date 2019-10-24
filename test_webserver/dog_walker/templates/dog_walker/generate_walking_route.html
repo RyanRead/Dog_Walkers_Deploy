@@ -1,26 +1,134 @@
 {% extends "dog_walker/base.html" %}
 {% load static %}
 {% load leaflet_tags %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_walker-my_dogs_homepage' %}">Add a Point of Interest</a>
+</li>
+
+{% endblock navbar %}
+
+
 {% block content %}
-    {% leaflet_js %}
-    {% leaflet_css %}
+{% leaflet_js %}
+{% leaflet_css %}
 
-    <style type="text/css">
-        #gis {width: 800px; height: 600px;}
-    </style>
-    <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
+<style type="text/css">
+         #gis {width: 100%; height: 750px;}
 
-    <script type="text/javascript">
+
+
+</style>
+<script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
+
+<script type="text/javascript">
         function add_points(map, options){
             var datasets = new L.GeoJSON.AJAX("{% url 'poi_dataset' %}", {
+                onEachFeature: function(feature, layer) {
+                    layer.bindPopup(feature.properties.name);
+                    layer.setIcon(new L.Icon({iconUrl:"/static/map/" +
+                        feature.properties.category +
+                        ".png",
+                    iconSize:   [18, 18],
+                    iconAnchor: [9, 13]
+                }))
+            }
+        });
+        datasets.addTo(map);
+    }
+</script>
 
-            });
-            datasets.addTo(map);
+
+<div class="row">
+    <div class="col-sm-8">
+        {% leaflet_map "gis" callback="window.add_points" %}
+    </div>
+    <div class="col-sm-4">
+        <form class="form" action="../display_route/" method="post">{% csrf_token %}
+
+            <label for="start_point">What is your Start Point?</label>
+            <select class="form-control" id="start_point" name="start_point">
+                {% for point in point_names %}
+                <option value="{{ point }}">{{ point }}</option>
+                {% endfor %}
+            </select>
+            <br>
+
+            <div id="middle_list">
+
+            </div>
+            <br>
+
+            <label for="end_point">What is your destination?</label>
+            <select class="form-control" id="end_point" name="end_point">
+                {% for point in point_names %}
+                <option value="{{ point }}">{{ point }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <input class="btn btn-primary" type="button" id="add_stop"
+                           onmousedown="add_stop_base();" value="Add a stop in the middle?">
+                    <input class="btn btn-primary" type="hidden" id="add_stop_more"
+                           onmousedown="add_stop_add();" value="Add another stop?">
+                </div>
+                <div class="col-sm-6">
+                    <input class="btn btn-primary" type="submit" id="generate_route" value="Generate The Route">
+                </div>
+                <input type="hidden" id="total_stops" value="0">
+                <!-- added to keep track of how many stops there are -->
+            </div>
+        </form>
+    </div>
+</div>
 
 
-        }
-    </script>
-    {% leaflet_map "gis" callback="window.add_points" %}
-<!--    <div id = "mapid" style="width: 800px; height: 600px;"> </div>-->
+<script>
+var i = 0;
+function increment()
+{
+    i += 1;
+}
+
+function add_stop_base()
+{
+    var helper = i + 1;
+    var new_stop = document.createElement('div')
+    new_stop.innerHTML = "<for='middle_point'>Where would you like to stop in the middle?</label><br><p>Stop #" +
+     helper +
+      "</p><select class='form-control' id='middle_point_" + i +
+            "'>" +
+        "{% for point in point_names %}" +
+            "<option value='{{ point }}'>{{ point }}</option>" +
+        "{% endfor %}" +
+        "</select>";
+    document.getElementById('middle_list').appendChild(new_stop);
+    document.getElementById('add_stop').type = 'hidden';
+    document.getElementById('add_stop_more').type = 'button';
+    increment();
+    document.getElementById('total_stops').value = i;
+}
+
+function add_stop_add()
+{
+    var helper = i + 1;
+    var new_stop = document.createElement('div')
+    new_stop.innerHTML = "<br><p>Stop #" + helper + "</p><select class='form-control' id='middle_point_" + i +
+        "'>" +
+        "{% for point in point_names %}" +
+            "<option value='{{ point }}'>{{ point }}</option>" +
+        "{% endfor %}" +
+        "</select>";
+    document.getElementById('middle_list').appendChild(new_stop);
+    increment();
+    document.getElementById('total_stops').value = i;
+}
+
+
+
+</script>
+
 
 {% endblock content %}

@@ -3,47 +3,58 @@
 {% load leaflet_tags %}
 
 {% block navbar %}
-    <li class="nav-item">
-        <a class="nav-link" href="#">Add a Point of Interest</a>
-    </li>
-   <li class="nav-item">
-        <a class="nav-link" href="#">Create Walking Route</a>
-    </li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_walker-add_a_poi' %}">Add a Point of Interest</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_walker-generate_walking_route' %}">Create Walking Route</a>
+</li>
 
 {% endblock navbar %}
 
 
 {% block content %}
-    {% leaflet_js %}
-    {% leaflet_css %}
-<div class="row">
-    <style type="text/css">
-        #gis {width: 800px; height: 600px;}
-    </style>
-    <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
+{% leaflet_js %}
+{% leaflet_css %}
 
-    <script type="text/javascript">
-        function add_points(map, options){
-            var datasets = new L.GeoJSON.AJAX("{% url 'poi_dataset' %}", {
+<style type="text/css">
+         #gis {width: 100%; height: 750px;}
 
-            });
-            datasets.addTo(map);
+</style>
+<script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
+
+<script type="text/javascript">
+
+
+    function add_points(map, options) {
+        var datasets = new L.GeoJSON.AJAX("{% url 'poi_dataset' %}", {
+        onEachFeature: function(feature, layer) {
+            layer.bindPopup(feature.properties.name);
+            layer.setIcon(new L.Icon({iconUrl:"/static/map/" +
+                feature.properties.category +
+                ".png",
+                iconSize:   [18, 18],
+                iconAnchor: [9, 13]}))
         }
-    </script>
-    {% leaflet_map "gis" callback="window.add_points" %}
+        });
 
-</div>
+        datasets.addTo(map);
+
+
+    }
+
+</script>
 
 
 <div class="row">
-    <div class="col-sm-4">Select Start Location</div>
-    <div class="col-sm-4">Select Middle Locations</div>
-    <div class="col-sm-4">Select End Location</div>
-
-
+    <div class="col-sm-8">
+        {% leaflet_map "gis" callback="window.add_points" %}
+    </div>
+    <div class="col-sm-4">
+        <h1 class="display-3">Poi Name</h1><br> <!--   add to get from database -->
+        <p class="lead"> Info about POI</p> <!--   add to get from database -->
+    </div>
 </div>
 
-<!--    <div id = "mapid" style="width: 800px; height: 600px;"> </div>-->
 
 {% endblock content %}
-

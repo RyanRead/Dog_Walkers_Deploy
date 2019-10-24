@@ -3,11 +3,13 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
 
-class LatLngPins(models.Model):
+class PointOfInterests(models.Model):
     name = models.CharField(max_length=100)
-    info = models.TextField()
+    description = models.TextField()
     creator = models.ForeignKey(User, on_delete=False)
     location = models.PointField(srid=4326)
+    category = models.CharField(max_length=20)
+    is_private = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

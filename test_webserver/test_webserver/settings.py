@@ -35,7 +35,7 @@ SECRET_KEY = 'a8$5%5e%xm3#gv*51mvw0#1=(c5d3w&5)wvlzbyepf37-xz)0q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['7612f520.ngrok.io']
+ALLOWED_HOSTS = ['130a5057.ngrok.io', '127.0.0.1']
 
 
 # Application definition
@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'crispy_forms',
     'leaflet',
+    # 'channels',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +138,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'asgi_redis.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('localhost', 6379)],
+#         },
+#         'ROUTING': 'example_channels.routing.channel_routing',
+#     }
+# }
+
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (50.44722980684235, -104.61782455444336),
     'DEFAULT_ZOOM': 12,
@@ -143,5 +155,11 @@ LEAFLET_CONFIG = {
     'MIN_ZOOM': 12,
     'ATTRIBUTION_PREFIX': 'DOG WALKER',
     'RESET_VIEW': False,
-    # 'MAX_BOUNDS': ((50.396700704675396, -104.48101043701172), (50.512771567674484, -104.732666015625)),
+    'DEFAULT_MAX_BOUNDS': ((50.396700704675396, -104.48101043701172), (50.512771567674484, -104.732666015625)),
 }
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'dog_walker-home'
+
+LOGIN_URL = 'dog_walker-login'

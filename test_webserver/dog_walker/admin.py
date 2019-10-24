@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import LatLngPins, DogBreeds, Dogs
+from .models import PointOfInterests, DogBreeds, Dogs
 from leaflet.admin import LeafletGeoAdmin
 
 
-class LatLngPinsAdmin(LeafletGeoAdmin):
+class PointOfInterestsAdmin(LeafletGeoAdmin):
     list_display = ('id', 'name', 'location')
     # pass
 
@@ -18,7 +18,7 @@ class DogsAdmin(admin.ModelAdmin):
     # pass
 
 
-admin.site.register(LatLngPins, LatLngPinsAdmin)
+admin.site.register(PointOfInterests, PointOfInterestsAdmin)
 admin.site.register(DogBreeds, DogBreedsAdmin)
 admin.site.register(Dogs, DogsAdmin)
 

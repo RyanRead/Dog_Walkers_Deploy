@@ -23,6 +23,7 @@
 <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script type="text/javascript" src="{% static 'map/graphhopper.js' %}"></script>
 <script type="text/javascript">
         function grab_point(point){
             var string_point = point.toString();
@@ -34,13 +35,18 @@
                 string_point.lastIndexOf(')')));
             return L.latLng(lat, lng);
         }
-
+        var key = "9aea8a48-eb69-493c-86b7-e3a4feb8c0d6";
         function add_points(map, options){
             L.Routing.control({
             waypoints: [
              grab_point("{{ start_point }}"),
              grab_point("{{ end_point }}")
-            ]
+            ],
+            router: L.Routing.graphHopper(key , {
+                urlParameters: {
+                    vehicle: 'foot'
+                }
+            })
             }).addTo(map);
         }
 </script>

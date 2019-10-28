@@ -32,6 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'a8$5%5e%xm3#gv*51mvw0#1=(c5d3w&5)wvlzbyepf37-xz)0q'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -41,6 +42,7 @@ ALLOWED_HOSTS = ['130a5057.ngrok.io', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'dog_walker.apps.DogWalkerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,8 +53,9 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'crispy_forms',
     'leaflet',
-    # 'channels',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,6 +68,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'test_webserver.urls'
+ASGI_APPLICATION = "test_webserver.routing.application"
 
 TEMPLATES = [
     {
@@ -82,7 +86,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'test_webserver.wsgi.application'
+# WSGI_APPLICATION = 'test_webserver.wsgi.application'
 
 
 # Database
@@ -144,7 +148,7 @@ STATIC_URL = '/static/'
 #         'CONFIG': {
 #             'hosts': [('localhost', 6379)],
 #         },
-#         'ROUTING': 'example_channels.routing.channel_routing',
+#         'ROUTING': 'routing.channel_routing',
 #     }
 # }
 

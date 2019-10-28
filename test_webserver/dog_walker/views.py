@@ -76,7 +76,8 @@ def add_a_poi(request):
             'is_private': True if request.POST.get('is_private') == 'yes' else False,
         }
         PointOfInterests.objects.create(**temp_dict)
-        current_map_state.notify()
+        # from .consumers import ViewConsumer
+        # ViewConsumer.trigger()
 
     return render(request, 'dog_walker/add_a_poi.html', {'title': 'Add A POI'})
 

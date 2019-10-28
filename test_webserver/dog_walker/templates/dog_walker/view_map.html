@@ -24,7 +24,16 @@
 <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
 
 <script type="text/javascript">
+    // var socket = new WebSocket('ws://' + window.location.host + window.location.pathname);
+    // socket.onopen = function open() {
+    //    console.log('WebSockets connection created.');
+    // };
 
+    // socket.onmessage = add_points()
+
+    // if (socket.readyState == WebSocket.OPEN) {
+    //  socket.onopen();
+    // }
 
     function add_points(map, options) {
         var datasets = new L.GeoJSON.AJAX("{% url 'poi_dataset' %}", {

@@ -1,0 +1,53 @@
+{% extends "dog_walker/base.html" %}
+{% block navbar %}
+
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_walker-my_dogs_homepage' %}">My Dogs</a>
+</li>
+
+
+
+{% endblock navbar %}
+{% block role %}
+    Current Role: Dog Walker
+{% endblock %}
+{% block content %}
+
+<style>
+    .row
+    {
+        padding-top:10%;
+    }
+    .form
+    {
+        background-color:pink;
+        padding: 50px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-8">
+        <form class="form">
+            <div class="form-row">
+                <p class="h1">Would You Like to Enter Your Own Information or Use a Saved Walking Route?</p>
+            </div>
+            <br><br>
+            <div class="form-row">
+                <div class="form-group col-sm-6" align="center">
+
+                    <a href="{% url 'dog_walker-record_a_walk_own_info' %}" class="btn btn-primary btn-lg ">Enter Your Own Information</a>
+                </div>
+                <div class="form-group col-sm-6" align="center">
+                    <a href="{% url 'dog_walker-record_a_walk_saved_walking_route' %}" class="btn btn-primary btn-lg">Use a Saved Walking Route</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-2">
+    </div>
+</div>
+
+
+    {% endblock content %}

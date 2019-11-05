@@ -4,7 +4,7 @@
 
 {% block navbar %}
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'dog_walker-my_dogs_homepage' %}">Add a Point of Interest</a>
+    <a class="nav-link" href="{% url 'dog_walker-add_a_poi' %}">Add a Point of Interest</a>
 </li>
 
 {% endblock navbar %}
@@ -53,7 +53,6 @@
                 <option value="{{ point }}">{{ point }}</option>
                 {% endfor %}
             </select>
-            <br>
 
             <div id="middle_list">
 
@@ -69,13 +68,11 @@
             <br>
             <div class="row">
                 <div class="col-sm-6">
-                    <input class="btn btn-primary" type="button" id="add_stop"
-                           onmousedown="add_stop_base();" value="Add a stop in the middle?">
-                    <input class="btn btn-primary" type="hidden" id="add_stop_more"
-                           onmousedown="add_stop_add();" value="Add another stop?">
+                    <input class="btn btn-primary" type="submit" id="generate_route" value="Generate The Route">
                 </div>
                 <div class="col-sm-6">
-                    <input class="btn btn-primary" type="submit" id="generate_route" value="Generate The Route">
+                    <input class="btn btn-primary" type="button" id="add_stop"
+                           onmousedown="add_middle_stop();" value="Add a stop in the middle?">
                 </div>
                 <input type="hidden" id="total_stops" value="0">
                 <!-- added to keep track of how many stops there are -->
@@ -86,48 +83,22 @@
 
 
 <script>
-var i = 0;
-function increment()
-{
+var i = 1;
+function add_middle_stop(){
+    var new_stop = document.createElement('div')
+    new_stop.innerHTML = "<br><p>Stop #" + i +
+      "</p><select class='form-control' name='middle_point_" + i + "'id='middle_point_" + i + "'>" +
+        "{% for point in point_names %}" +
+            "<option value='{{ point }}'>{{ point }}</option>" +
+        "{% endfor %}" +
+        "</select>";
+    document.getElementById('middle_list').appendChild(new_stop);
+    if (i >= 3) {
+        document.getElementById('add_stop').type = 'hidden';
+    }
     i += 1;
-}
-
-function add_stop_base()
-{
-    var helper = i + 1;
-    var new_stop = document.createElement('div')
-    new_stop.innerHTML = "<for='middle_point'>Where would you like to stop in the middle?</label><br><p>Stop #" +
-     helper +
-      "</p><select class='form-control' id='middle_point_" + i +
-            "'>" +
-        "{% for point in point_names %}" +
-            "<option value='{{ point }}'>{{ point }}</option>" +
-        "{% endfor %}" +
-        "</select>";
-    document.getElementById('middle_list').appendChild(new_stop);
-    document.getElementById('add_stop').type = 'hidden';
-    document.getElementById('add_stop_more').type = 'button';
-    increment();
     document.getElementById('total_stops').value = i;
 }
-
-function add_stop_add()
-{
-    var helper = i + 1;
-    var new_stop = document.createElement('div')
-    new_stop.innerHTML = "<br><p>Stop #" + helper + "</p><select class='form-control' id='middle_point_" + i +
-        "'>" +
-        "{% for point in point_names %}" +
-            "<option value='{{ point }}'>{{ point }}</option>" +
-        "{% endfor %}" +
-        "</select>";
-    document.getElementById('middle_list').appendChild(new_stop);
-    increment();
-    document.getElementById('total_stops').value = i;
-}
-
-
-
 </script>
 
 

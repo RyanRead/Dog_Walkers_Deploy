@@ -1,0 +1,74 @@
+{% extends "dog_walker/base.html" %}
+
+{% block navbar %}
+{% endblock navbar %}
+{% block role %}
+Current Role: Dog Walker
+{% endblock role %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+
+    <div class="col-sm-10">
+        <div class="row">
+            <h1 class="display-2">Join A Class</h1>
+        </div>
+        <div class="row" style="padding-top: 20px;">
+            <table class="table table-hover table-striped table-dark">
+                <thead>
+                <tr>
+                    <th scope="col" class="h1">Class Name</th>
+                    <th scope="col" class="h1">Instructor</th>
+                    <th scope="col" class="h1">Date</th>
+                    <th scope="col" class="h1">Time</th>
+                    <th scope="col" class="h1">Duration</th>
+                    <th scope="col" class="h1">Route</th>
+                    <th scope="col" class="h1">Current Registered</th>
+                    <th scope="col" class="h1">Max Registered</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--loop for each entry -->
+                <tr>
+                    <td class="h3">Fun Dog Times</td>
+                    <td class="h3">Henry is gay</td>
+                    <td class="h3">November 30th 2019</td>
+                    <td class="h3">1:00 PM</td>
+                    <td class="h3">60 Mins</td>
+                    <td class="h3">Walk Around the Lake</td>
+                    <td class="h3">7</td>
+                    <td class="h3">8</td>
+                    <td><a href=# class="btn btn-primary">View More Details</a></td>
+                    <td>
+                        <button class="btn btn-primary"> Join The Class</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="h3">Ryan's Doggy Class</td>
+                    <td class="h3">Not gay Henry</td>
+                    <td class="h3">November 20th 2019</td>
+                    <td class="h3">9:00 AM</td>
+                    <td class="h3">120 Mins</td>
+                    <td class="h3">Walk Around the U of R</td>
+                    <td class="h3">10</td>
+                    <td class="h3">10</td>
+                    <td><a href=# class="btn btn-primary">View More Details</a></td>
+                    <td>
+                        <button class="btn btn-primary" disabled> Join The Class</button>
+                    </td>
+                </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+
+
+{% endblock content %}

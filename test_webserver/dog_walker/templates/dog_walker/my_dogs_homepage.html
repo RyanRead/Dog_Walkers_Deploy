@@ -4,6 +4,9 @@
 <li class="nav-item">
     <a class="nav-link" href="{% url 'dog_walker-add_a_dog' %}">Add a Dog</a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_walker-record_a_walk' %}">Record A Walk</a>
+</li>
 
 
 {% endblock navbar %}
@@ -22,7 +25,7 @@
                 <tr>
                     <th scope="col"></th>
                     <th scope="col" class="h1">Dog Name</th>
-                    <th scope="col" class="h1">Dog Weight</th>
+                    <th scope="col" class="h1">Dog Breed</th>
                     <th scope="col" class="h1">Dog Age</th>
                     <th scope="col"></th>
                 </tr>
@@ -32,11 +35,11 @@
                 <tr>
                     <td><img class="img-thumbnail"
                              src="{{ dog.image }}"
-                             alt="Pic of Pet" style="height:70px; width:70px;"></td>
+                             alt="/static/dogs/default.png" style="height:70px; width:70px;"></td>
                     <td class="h3">{{ dog.name }}</td>
                     <td class="h3">{{ dog.breed }}</td>
                     <td class="h3">{{ dog.age }}</td>
-                    <td><a href="{% url 'dog_walker-dog_info' %}" class="btn btn-primary">View More Details</a></td>
+                    <td><a href="../dog_info/{{ dog.name }}/" class="btn btn-primary">View More Details</a></td>
                 </tr>
                 {% endfor %}
                 </tbody>

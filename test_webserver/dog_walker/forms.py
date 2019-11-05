@@ -4,7 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
-    # isTrainer = forms.BooleanField()
+    isTrainer = forms.BooleanField(label="Are You a Dog Trainer?")
+
 
     class Meta:
         model = User

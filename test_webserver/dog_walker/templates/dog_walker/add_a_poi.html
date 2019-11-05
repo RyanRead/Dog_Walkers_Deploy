@@ -23,16 +23,24 @@
 <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
 
 <script type="text/javascript">
-    function add_points(map, options){
+    function add_points(map, options) {
         var datasets = new L.GeoJSON.AJAX("{% url 'poi_dataset' %}", {
+            onEachFeature: function(feature, layer) {
+                layer.bindPopup(feature.properties.name);
+                layer.setIcon(new L.Icon({iconUrl:"/static/map/" +
+                    feature.properties.category +
+                    ".png",
+                    iconSize:   [18, 18],
+                    iconAnchor: [9, 13]}))
+            }
         });
+
         datasets.addTo(map);
 
         var the_marker = {};
 
         map.on('click', function(e){
             var latlng = map.mouseEventToLatLng(e.originalEvent);
-            // console.log(latlng.lat + ', ' + latlng.lng);
             document.getElementById("lat").value = latlng.lat
             document.getElementById("lng").value = latlng.lng
 
@@ -64,7 +72,7 @@
                     <select class="form-control" id="poi_category" name="category">
                         <option value="garbage_can">Garbage Can</option>
                         <option value="poop_bags">Poop Bags</option>
-                        <option value="dog_friendly_shop">Dog Friendly Location</option>
+                        <option value="dog_friendly">Dog Friendly Location</option>
                         <option value="outdoor_location">Outdoor Location</option>
                     </select>
                 </div>

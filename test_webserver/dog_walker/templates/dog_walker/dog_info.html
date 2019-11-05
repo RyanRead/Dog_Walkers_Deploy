@@ -19,12 +19,12 @@
         <div class="row">
             <div class="col-sm-6">
                 <img class="img-fluid border border-dark rounded" height="auto"
-                     src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Chihuahua1_bvdb.jpg" alt="Pic of Pet">
+                     src="{{ dog.image }}" alt="static/dogs/default.png">
             </div>
             <div class="col-sm-6">
-                <p> Dog Name: Killer</p>
-                <p> Dog Breed: Chihuahua</p>
-                <p> Dog Exercise Needs: 30 mins a day</p>
+                <h3>{{ dog.name }}</h3>
+                <p> {{ dog.breed }}</p>
+                <p> Needs {{ dog.exercise_needs }} mins of exercise per day</p>
                 <table class="table">
                     <thead>
                     <tr>
@@ -36,13 +36,13 @@
                     <tbody>
                     <tr>
                         <th scope="row">Age</th>
-                        <td>5 years</td>
-                        <td>15 years</td>
+                        <td>{{ dog.age }} years</td>
+                        <td>{{ dog.avg_age }} years</td>
                     </tr>
                     <tr>
                         <th scope="row">Weight</th>
-                        <td>10 lbs</td>
-                        <td>10 lbs</td>
+                        <td>{{ dog.weight }} lbs</td>
+                        <td>{{ dog.avg_weight }} lbs</td>
                     </tr>
                     </tbody>
                 </table>

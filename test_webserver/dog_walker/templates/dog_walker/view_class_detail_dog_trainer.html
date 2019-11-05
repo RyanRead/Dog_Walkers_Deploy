@@ -1,0 +1,96 @@
+{% extends "dog_walker/base.html" %}
+{% block role %}
+Current Role: Dog Walker
+{% endblock role %}
+{% load static %}
+{% load leaflet_tags %}
+
+{% block navbar %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_walker-generate_walking_route' %}">Create Walking Route</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_walker-view_map' %}">View Map</a>
+</li>
+{% endblock navbar %}
+
+
+{% block content %}
+{% leaflet_js %}
+{% leaflet_css %}
+
+<style type="text/css">
+         #gis {width: 100%; height: 600px;}
+
+
+</style>
+<script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script type="text/javascript" src="{% static 'map/graphhopper.js' %}"></script>
+<script type="text/javascript">
+        function grab_point(point){
+            var string_point = point.toString();
+            var lng = parseFloat(string_point.slice(
+                string_point.indexOf('(') + 1,
+                string_point.lastIndexOf(' ')));
+            var lat = parseFloat(string_point.slice(
+                string_point.lastIndexOf(' '),
+                string_point.lastIndexOf(')')));
+            return L.latLng(lat, lng);
+        }
+        var key = "9aea8a48-eb69-493c-86b7-e3a4feb8c0d6";
+        function add_points(map, options){
+            L.Routing.control({
+            waypoints: [
+             grab_point("{{ start_point }}"),
+             grab_point("{{ end_point }}")
+            ],
+            router: L.Routing.graphHopper(key , {
+                urlParameters: {
+                    vehicle: 'foot'
+                }
+            })
+            }).addTo(map);
+        }
+
+
+</script>
+
+
+<div class="row">
+    <div class="col-sm-8">
+        {% leaflet_map "gis" callback="window.add_points" %}
+    </div>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th scope="row">Class Name</th>
+            <td>Fun Dog Times</td>
+        </tr>
+        <tr>
+            <th scope="row">Date</th>
+            <td>November 30th 2019</td>
+        </tr>
+        <tr>
+            <th scope="row">Time</th>
+            <td>1:00 PM</td>
+        </tr>
+        <tr>
+            <th scope="row">Duration</th>
+            <td>60 Mins</td>
+        </tr>
+        <tr>
+            <th scope="row">Current Registered</th>
+            <td>7</td>
+        </tr>
+        <tr>
+            <th scope="row">Max Registered</th>
+            <td>8</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}

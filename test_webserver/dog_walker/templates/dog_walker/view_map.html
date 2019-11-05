@@ -24,32 +24,27 @@
 <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
 
 <script type="text/javascript">
-    // var socket = new WebSocket('ws://' + window.location.host + window.location.pathname);
-    // socket.onopen = function open() {
-    //    console.log('WebSockets connection created.');
-    // };
-
-    // socket.onmessage = add_points()
-
-    // if (socket.readyState == WebSocket.OPEN) {
-    //  socket.onopen();
-    // }
 
     function add_points(map, options) {
         var datasets = new L.GeoJSON.AJAX("{% url 'poi_dataset' %}", {
-        onEachFeature: function(feature, layer) {
-            layer.bindPopup(feature.properties.name);
-            layer.setIcon(new L.Icon({iconUrl:"/static/map/" +
-                feature.properties.category +
-                ".png",
-                iconSize:   [18, 18],
-                iconAnchor: [9, 13]}))
-        }
+            onEachFeature: function(feature, layer) {
+                layer.bindPopup(feature.properties.name);
+                layer.setIcon(new L.Icon({iconUrl:"/static/map/" +
+                    feature.properties.category +
+                    ".png",
+                    iconSize:   [18, 18],
+                    iconAnchor: [9, 13]}))
+
+                layer.on('click', function() {
+                    header = document.getElementById('poi_name');
+                    header.innerHTML = feature.properties.name;
+                    description = document.getElementById('poi_description');
+                    description.innerHTML = feature.properties.description;
+                });
+            }
         });
 
         datasets.addTo(map);
-
-
     }
 
 </script>
@@ -60,8 +55,8 @@
         {% leaflet_map "gis" callback="window.add_points" %}
     </div>
     <div class="col-sm-4">
-        <h1 class="display-3">Poi Name</h1><br> <!--   add to get from database -->
-        <p class="lead"> Info about POI</p> <!--   add to get from database -->
+        <h1 class="display-5" id="poi_name"></h1><br>
+        <p class="lead" id="poi_description"></p> <!--   add to get from database -->
     </div>
 </div>
 

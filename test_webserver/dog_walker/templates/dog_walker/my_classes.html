@@ -1,0 +1,54 @@
+{% extends "dog_walker/base.html" %}
+{% block role %}
+    Current Role: Dog Trainer
+{% endblock role %}
+{% block navbar %}
+{% endblock navbar %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+
+    <div class="col-sm-10">
+        <div class="row">
+            <h1 class="display-2">My Classes</h1>
+        </div>
+        <div class="row" style="padding-top: 20px;">
+            <table class="table table-hover table-striped table-dark">
+                <thead>
+                <tr>
+                    <th scope="col" class="h1">Class Name</th>
+                    <th scope="col" class="h1">Date</th>
+                    <th scope="col" class="h1">Time</th>
+                    <th scope="col" class="h1">Duration</th>
+                    <th scope="col" class="h1">Route</th>
+                    <th scope="col" class="h1">Current Registered</th>
+                    <th scope="col" class="h1">Max Registered</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--loop for each entry -->
+                <tr>
+                    <td class="h3">Fun Dog Times</td>
+                    <td class="h3">November 30th 2019</td>
+                    <td class="h3">1:00 PM</td>
+                    <td class="h3">60 Mins</td>
+                    <td class="h3">Walk Around the Lake</td>
+                    <td class="h3">7</td>
+                    <td class="h3">8</td>
+                    <td><a href=# class="btn btn-primary">View More Details</a></td>
+                </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+
+
+    {% endblock content %}

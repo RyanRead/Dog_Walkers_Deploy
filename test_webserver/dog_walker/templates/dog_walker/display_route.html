@@ -25,30 +25,56 @@
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script type="text/javascript" src="{% static 'map/graphhopper.js' %}"></script>
 <script type="text/javascript">
-        function grab_point(point){
-            var string_point = point.toString();
-            var lng = parseFloat(string_point.slice(
-                string_point.indexOf('(') + 1,
-                string_point.lastIndexOf(' ')));
-            var lat = parseFloat(string_point.slice(
-                string_point.lastIndexOf(' '),
-                string_point.lastIndexOf(')')));
-            return L.latLng(lat, lng);
-        }
-        var key = "9aea8a48-eb69-493c-86b7-e3a4feb8c0d6";
-        function add_points(map, options){
-            L.Routing.control({
+    var i = 0;
+    function grab_point(point){
+        if(i == 0)
+            document.getElementById('start_point').value = point;
+        else if(i == 1)
+            document.getElementById('middle_point_1').value = point;
+        else if(i == 2)
+            document.getElementById('middle_point_2').value = point;
+        else if(i == 3)
+            document.getElementById('middle_point_3').value = point;
+        else if(i == 4)
+            document.getElementById('end_point').value = point;
+        i++;
+        var string_point = point.toString();
+        var lng = parseFloat(string_point.slice(
+            string_point.indexOf('(') + 1,
+            string_point.lastIndexOf(' ')));
+        var lat = parseFloat(string_point.slice(
+            string_point.lastIndexOf(' '),
+            string_point.lastIndexOf(')')));
+        return L.latLng(lat, lng);
+    }
+
+    var key = "9aea8a48-eb69-493c-86b7-e3a4feb8c0d6";
+    function add_points(map, options){
+        var stuff = L.Routing.control({
             waypoints: [
-             grab_point("{{ start_point }}"),
-             grab_point("{{ end_point }}")
+                 {% for point in points %}
+                 grab_point("{{ point }}"),
+                 {% endfor %}
             ],
+            draggableWaypoints: false,
+            addWaypoints: false,
             router: L.Routing.graphHopper(key , {
                 urlParameters: {
                     vehicle: 'foot'
                 }
-            })
-            }).addTo(map);
-        }
+            }),
+            routeWhileDragging: false
+        }).addTo(map);
+
+        stuff.on('routesfound', function(e) {
+            var routes = e.routes;
+            document.getElementById('duration').innerHTML = (routes[0].summary.totalTime / 60).toFixed(0) + ' minute(s).';
+            document.getElementById('distance').innerHTML = 'Distance:' + (routes[0].summary.totalDistance / 1000).toFixed(1) + ' Km';
+            // In Minutes
+            document.getElementById('duration_hidden').value = (routes[0].summary.totalTime / 60).toFixed(0)
+            });
+
+    }
 </script>
 
 
@@ -57,10 +83,21 @@
         {% leaflet_map "gis" callback="window.add_points" %}
     </div>
     <div class="col-sm-4">
-        <p class="lead">This Route will cover __ KM </p> <!--   add to get from database -->
-        <p class="lead">It will take approximately TIME to complete  </p>
-        <a href="#" class="btn btn-primary" type="submit">Save The Route</a>
-        <a href="#" class="btn btn-primary" type="submit">Create a different route</a>
+        <p class="lead" id="distance"></p>
+        <p class="lead" id="duration"></p>
+        <form class="form" action="." method="post"> {% csrf_token %}
+            <div class="'form-row">
+                <label for="route_name">What would you like to call your route?</label>
+                <input name="route_name" class="form-control" id="route_name" type="text">
+                <input name="duration" id="duration_hidden" type="hidden">
+                <input name="start_point" id="start_point" type="hidden">
+                <input name="middle_point_1" id="middle_point_1" type="hidden">
+                <input name="middle_point_2" id="middle_point_2" type="hidden">
+                <input name="middle_point_3" id="middle_point_3" type="hidden">
+                <input name="end_point" id="end_point" type="hidden">
+            </div>
+            <button class="btn btn-primary" type="submit">Save The Route</button>
+        </form>
     </div>
 </div>
 

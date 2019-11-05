@@ -36,7 +36,7 @@ SECRET_KEY = 'a8$5%5e%xm3#gv*51mvw0#1=(c5d3w&5)wvlzbyepf37-xz)0q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['130a5057.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = ['a3fdf7de.ngrok.io', '127.0.0.1']
 
 
 # Application definition
@@ -142,6 +142,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = 'dog_walker/static/dogs/'
+
+MEDIA_URL = 'images-by-url/'
+
 # CHANNEL_LAYERS = {
 #     'default': {
 #         'BACKEND': 'asgi_redis.RedisChannelLayer',
@@ -167,3 +171,17 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'dog_walker-home'
 
 LOGIN_URL = 'dog_walker-login'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_USE_TLS = True
+
+EMAIL_PORT = 587
+
+EMAIL_HOST_USER = 'dogwalkersregina@gmail.com'
+
+EMAIL_HOST_PASSWORD = '%m#J1rZRSnXF'

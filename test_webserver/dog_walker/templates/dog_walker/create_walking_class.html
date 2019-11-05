@@ -1,0 +1,99 @@
+{% extends "dog_walker/base.html" %}
+{% block role %}
+Current Role: Dog Trainer
+{% endblock role %}
+{% block navbar %}
+
+{% endblock navbar %}
+{% block content %}
+
+<style>
+    .row
+    {
+        padding-top:10%;
+    }
+    .form
+    {
+        background-color:pink;
+        padding: 50px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-8">
+        <form class="form" method="post"> {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label for="class_route">Which Route Will the Class Take?</label>
+                    <select class="form-control" id="class_route">
+                        <!-- add loop for options -->
+                        <option value="route1">Cool Walk</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="new_class_route">Want to Make a New Route?</label>
+                    <a id="new_class_route" href="#" class="btn btn-primary btn-lg form-control">Create A New Route</a>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-12">
+                     <label for="class_name">What would you like to call your class?</label>
+                    <input type="text" class="form-control" id="class_name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <label for="class_start">When will the class begin?</label>
+                    <input type="time" class="form-control" id="class_start" value="12:00">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="class_date">What date is the class?</label>
+                    <input type="date" class="form-control" id="class_date">
+                </div>
+            </div>
+            <div class="form-row">
+                <label for="class_participants">What is the max amount of participants in the class?</label>
+                <select class="form-control" id="class_participants">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Create Class</button>
+        </form>
+    </div>
+    <div class="col-sm-2">
+    </div>
+</div>
+
+<script>
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
+ if(dd<10){
+        dd='0'+dd
+    }
+    if(mm<10){
+        mm='0'+mm
+    }
+today = yyyy+'-'+mm+'-'+dd;
+document.getElementById("class_date").setAttribute("min", today);
+document.getElementById("class_date").setAttribute("value", today);
+
+
+
+</script>
+{% endblock content %}

@@ -1,17 +1,20 @@
 {% extends "dog_walker/base.html" %}
+{% block role %}
+    Current Role: Dog Walker
+{% endblock %}
 {% block content %}
 
-
 <div class="row">
-    <div class="col-sm-6">
-<!--        <button  type=button" class="btn btn-primary btn-lg btn-block" >View Map</button>-->
+    <div class="col-sm-4">
         <a href="{% url 'dog_walker-view_map' %}" class="btn btn-primary btn-lg btn-block">View Map</a>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <a href="{% url 'dog_walker-my_dogs_homepage' %}" class="btn btn-primary btn-lg btn-block">My Dogs</a>
     </div>
+    <div class="col-sm-4">
+        <a href="{% url 'dog_walker-walking_classes' %}" class="btn btn-primary btn-lg btn-block">Join A Walking Class</a>
+    </div>
 </div>
-
 
 
 

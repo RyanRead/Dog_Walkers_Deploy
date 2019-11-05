@@ -13,7 +13,9 @@
                 background-color: lightblue;
               }
         *.btn-block { padding: 40% 0;  }
-
+        *.alert {
+          padding: 50px;
+        }
     </style>
     {% if title %}
     <title>Dog Walker - {{title}}</title>
@@ -35,17 +37,38 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">Change Your Role</a>
+                aria-haspopup="true" aria-expanded="false">{% block role %} {% endblock %}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Dog Owner</a>
-                <a class="dropdown-item" href="#">Dog Trainer</a>
+                <a class="dropdown-item" href="{% url 'dog_walker-home'%}">Dog Owner</a>
+                <a class="dropdown-item" href="{% url 'dog_trainer-home'%}">Dog Trainer</a>
             </div>
         </li>
         </li><a href="{% url 'dog_walker-logout' %}" class="btn bg-light" type="submit">Logout</a> </li
     </ul>
     {% endif %}
 </nav>
+{% if messages %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
 
+        {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="alert alert-success" role="alert" id="alert" align="center">
+            <strong>{{ message }}</strong>
+        </div>
+        {% endif %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger" role="alert">
+            <strong>{{ message }}</strong>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+    </div>
+    <div class="col-sm-2"></div>
+</div>
+{% endif %}
 {% block content %}{% endblock %}
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -56,5 +79,12 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script>
+    setTimeout(function()
+    {
+        $('#alert').hide();
+    }, 5000);
+</script>
+
 </body>
 </html>

@@ -1,0 +1,23 @@
+{% extends "dog_walker/base.html" %}
+
+{% block role %}
+    Current Role: Dog Trainer
+{% endblock %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-6">
+<!--        <button  type=button" class="btn btn-primary btn-lg btn-block" >View Map</button>-->
+        <a href="{% url 'dog_trainer-my_classes' %}" class="btn btn-primary btn-lg btn-block">My Classes</a>
+    </div>
+    <div class="col-sm-6">
+        <a href="{% url 'dog_trainer-create_walking_class' %}" class="btn btn-primary btn-lg btn-block">Create Training Class</a>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

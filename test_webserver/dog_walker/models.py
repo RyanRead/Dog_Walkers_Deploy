@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 
 
 class PointOfInterests(models.Model):
+    CATERGORY = [
+        ('', ''),
+        ('', ''),
+        ('', ''),
+        ('', ''),
+    ]
     name = models.CharField(max_length=100)
     description = models.TextField()
     creator = models.ForeignKey(User, on_delete=False)
@@ -47,3 +53,68 @@ class Dogs(models.Model):
     class Meta:
         verbose_name = 'Dog'
         verbose_name_plural = 'Dogs'
+
+
+class WalkingRoute(models.Model):
+    ROUTE_TYPES = [
+        ('Leisure', 'Leisure'),
+        ('Training', 'Training')
+    ]
+    walking_route_name = models.CharField(max_length=25)
+
+    walking_route_start = models.ForeignKey(
+        PointOfInterests, related_name='StartPoint', null=False, on_delete=True)
+    walking_route_middle_1 = models.ForeignKey(
+        PointOfInterests, related_name='Stop1', null=True, blank=True, on_delete=True)
+    walking_route_middle_2 = models.ForeignKey(
+        PointOfInterests, related_name='Stop2', null=True, blank=True, on_delete=True)
+    walking_route_middle_3 = models.ForeignKey(
+        PointOfInterests, related_name='Stop3', null=True, blank=True, on_delete=True)
+    walking_route_end = models.ForeignKey(
+        PointOfInterests, related_name='EndPoint', null=False, on_delete=True)
+
+    walking_route_duration = models.PositiveSmallIntegerField()
+    walking_route_type = models.CharField(max_length=10,
+                                          choices=ROUTE_TYPES,
+                                          default='Leisure')
+    user_id = models.ForeignKey(User, on_delete=True)
+
+    def __str__(self):
+        return self.walking_route_name
+
+    class Meta:
+        verbose_name = 'Walking Route'
+        verbose_name_plural = 'Walking Routes'
+
+
+class WalkingClass(models.Model):
+    class_name = models.CharField(max_length=20)
+    class_instructor = models.ForeignKey(User, on_delete=False)
+    walking_route_id = models.ForeignKey(WalkingRoute, on_delete=False)
+    class_date = models.DateField()
+    class_time = models.DateTimeField()
+    class_max_participants = models.PositiveSmallIntegerField()
+    class_full = models.BooleanField(default=False)
+    class_description = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.class_name
+
+    class Meta:
+        verbose_name = 'Walking Class'
+        verbose_name_plural = 'Walking Classes'
+
+
+class JoinedClass(models.Model):
+    user_id = models.ForeignKey(User, on_delete=False)
+    class_id = models.ForeignKey(WalkingClass, on_delete=False)
+
+    class Meta:
+        verbose_name = 'Joined Classes'
+        verbose_name_plural = 'Joined Classes'
+
+
+class RecordedExercise(models.Model):
+    dog_id = models.ForeignKey(Dogs, on_delete='false')
+    exercise_date = models.DateField()
+    exercise_duration = models.PositiveSmallIntegerField()

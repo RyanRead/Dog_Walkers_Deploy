@@ -8,15 +8,15 @@ def point_of_interest_dataset(request):
     data = serialize('geojson', PointOfInterests.objects.all())
     return HttpResponse(data, content_type='json')
 
-
-def dog_breed_dataset(request):
-    data = DogBreeds.objects.all()
-    return HttpResponse(data, content_type='json')
-
-
-def dogs_dataset(request):
-    data = Dogs.objects.all()
-    return HttpResponse(data, content_type='json')
+#
+# def dog_breed_dataset(request):
+#     data = DogBreeds.objects.all()
+#     return HttpResponse(data, content_type='json')
+#
+#
+# def dogs_dataset(request):
+#     data = Dogs.objects.all()
+#     return HttpResponse(data, content_type='json')
 
 
 

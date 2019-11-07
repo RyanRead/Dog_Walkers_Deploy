@@ -1,6 +1,6 @@
 {% extends "dog_walker/base.html" %}
 {% block role %}
-    Current Role: Dog Walker
+Current Role: Dog Walker
 {% endblock %}
 {% block navbar %}
 <li class="nav-item">
@@ -18,7 +18,6 @@
 {% block content %}
 
 
-
 <style>
     .row
     {
@@ -29,6 +28,9 @@
         background-color:pink;
         padding: 50px;
     }
+
+
+
 </style>
 
 <div class="row">
@@ -37,33 +39,32 @@
     <div class="col-sm-8">
         <form class="form" action="{% url 'dog_walker-record_a_walk_saved_walking_route' %}" method="post"> {% csrf_token %}
             <div class="form_row">
-                <div class="form-group col-sm-4">
-                  <label for="dog_name">Which Dog did you take on a Walk?</label>
-                   <select class="form-control" name="dog_name" id="dog_name">
+                <label for="dog_name">Which Dog did you take on a Walk?</label>
+                <select class="form-control" name="dog_name" id="dog_name">
                     {% for dog in dogs %}
-                       <option value="{{ dog }}">{{ dog }}</option>
+                    <option value="{{ dog }}">{{ dog }}</option>
                     {% endfor %}
-                   </select>
-                </div>
+                </select>
             </div>
-             <br>
+            <br>
             <div class="form-row">
-              <div class="form-group col-sm-4">
-                   <label for="walk_distance">How far did you walk? (KM)</label>
+                <div class="form-group col-sm-4">
+                    <label for="walk_distance">How far did you walk? (KM)</label>
                     <input type="number" class="form-control" id="walk_distance">
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="walk_start">When did you start your walk?</label>
                     <input type="time" class="form-control" name="walk_start" id="walk_start" value="12:00">
                 </div>
-                 <div class="form-group col-sm-4">
+                <div class="form-group col-sm-4">
                     <label for="walk_end">When did you end your walk?</label>
                     <input type="time" class="form-control" name="walk_end" id="walk_end" value="12:00">
                 </div>
             </div>
             <div class="form-row">
-                 <label for="walk_date">What date did you complete the walk?</label>
-                    <input type="date" class="form-control" name="walk_date" id="walk_date" value="2015-01-01" min="1980-01-01">
+                <label for="walk_date">What date did you complete the walk?</label>
+                <input type="date" class="form-control" name="walk_date" id="walk_date" value="2015-01-01"
+                       min="1980-01-01">
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Record Walk</button>
@@ -87,5 +88,8 @@ var yyyy = today.getFullYear();
 today = yyyy+'-'+mm+'-'+dd;
 document.getElementById("walk_date").setAttribute("max", today);
 document.getElementById("walk_date").setAttribute("value", today);
+
+
+
 </script>
 {% endblock content %}

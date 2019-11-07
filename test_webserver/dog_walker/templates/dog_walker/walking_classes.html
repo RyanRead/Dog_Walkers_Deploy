@@ -1,11 +1,17 @@
 {% extends "dog_walker/base.html" %}
-
 {% block navbar %}
 {% endblock navbar %}
 {% block role %}
 Current Role: Dog Walker
 {% endblock role %}
 {% block content %}
+
+<script>
+    function submit_form(class_id) {
+        document.getElementById('class_id').value = class_id;
+        document.getElementById('my_form').submit();
+    }
+</script>
 
 <div class="row">
     <div class="col-sm-1"></div>
@@ -31,44 +37,28 @@ Current Role: Dog Walker
                 </tr>
                 </thead>
                 <tbody>
-                <!--loop for each entry -->
+                {% for class in classes %}
                 <tr>
-                    <td class="h3">Fun Dog Times</td>
-                    <td class="h3">Henry is gay</td>
-                    <td class="h3">November 30th 2019</td>
-                    <td class="h3">1:00 PM</td>
-                    <td class="h3">60 Mins</td>
-                    <td class="h3">Walk Around the Lake</td>
-                    <td class="h3">7</td>
-                    <td class="h3">8</td>
-                    <td><a href=# class="btn btn-primary">View More Details</a></td>
-                    <td>
-                        <button class="btn btn-primary"> Join The Class</button>
-                    </td>
+                    <td class="h3">{{ class.class_name }}</td>
+                    <td class="h3">{{ class.class_instructor.first_name }} {{ class.class_instructor.last_name }}</td>
+                    <td class="h3">{{ class.class_date }}</td>
+                    <td class="h3">{{ class.class_time }}</td>
+                    <td class="h3">{{ class.walking_route_id.walking_route_duration }} Mins</td>
+                    <td class="h3">{{ class.walking_route_id.walking_route_name }}</td>
+                    <td class="h3">shit</td>
+                    <td class="h3">{{ class.class_max_participants }}</td>
+                    <td><a href="../view_class_detail_dog_walker/{{ class.class_instructor }}'s-{{ class.class_name }}/" class="btn btn-primary">View More Details</a></td>
+                    <td><button class="btn btn-primary" onclick="submit_form('{{ class.id }}')"> Join The Class</button></td>
                 </tr>
-                <tr>
-                    <td class="h3">Ryan's Doggy Class</td>
-                    <td class="h3">Not gay Henry</td>
-                    <td class="h3">November 20th 2019</td>
-                    <td class="h3">9:00 AM</td>
-                    <td class="h3">120 Mins</td>
-                    <td class="h3">Walk Around the U of R</td>
-                    <td class="h3">10</td>
-                    <td class="h3">10</td>
-                    <td><a href=# class="btn btn-primary">View More Details</a></td>
-                    <td>
-                        <button class="btn btn-primary" disabled> Join The Class</button>
-                    </td>
-                </tr>
-
+                {% endfor %}
                 </tbody>
-
             </table>
         </div>
-
         <div class="col-sm-1"></div>
     </div>
 </div>
-
+<form class="form" id="my_form" action="." method="post">{% csrf_token %}
+    <input type="hidden" id="class_id" name="class_id" value="">
+</form>
 
 {% endblock content %}

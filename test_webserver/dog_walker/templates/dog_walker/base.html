@@ -16,6 +16,9 @@
         *.alert {
           padding: 50px;
         }
+        .asteriskField {
+        display: none;
+        }
     </style>
     {% if title %}
     <title>Dog Walker - {{title}}</title>
@@ -35,14 +38,16 @@
         {% if user.is_authenticated %}
     </ul>
     <ul class="navbar-nav ml-auto">
+      {% if user.profile.is_trainer == True %}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">{% block role %} {% endblock %}</a>
+               aria-haspopup="true" aria-expanded="false">{% block role %} {% endblock %}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'dog_walker-home'%}">Dog Owner</a>
                 <a class="dropdown-item" href="{% url 'dog_trainer-home'%}">Dog Trainer</a>
             </div>
         </li>
+        {% endif %}
         </li><a href="{% url 'dog_walker-logout' %}" class="btn bg-light" type="submit">Logout</a> </li
     </ul>
     {% endif %}
@@ -59,7 +64,7 @@
         </div>
         {% endif %}
         {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert" align="center">
             <strong>{{ message }}</strong>
         </div>
         {% endif %}

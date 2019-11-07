@@ -36,16 +36,14 @@ SECRET_KEY = 'a8$5%5e%xm3#gv*51mvw0#1=(c5d3w&5)wvlzbyepf37-xz)0q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['a3fdf7de.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = ['ebe60711.ngrok.io', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
-    'dog_walker.apps.DogWalkerConfig',
-    'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -53,8 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'crispy_forms',
     'leaflet',
+    'dog_walker.apps.DogWalkerConfig',
 ]
-
 
 
 MIDDLEWARE = [
@@ -68,7 +66,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'test_webserver.urls'
-ASGI_APPLICATION = "test_webserver.routing.application"
 
 TEMPLATES = [
     {
@@ -86,7 +83,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'test_webserver.wsgi.application'
+WSGI_APPLICATION = 'test_webserver.wsgi.application'
 
 
 # Database
@@ -145,16 +142,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = 'dog_walker/static/dogs/'
 
 MEDIA_URL = 'images-by-url/'
-
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'asgi_redis.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [('localhost', 6379)],
-#         },
-#         'ROUTING': 'routing.channel_routing',
-#     }
-# }
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (50.44722980684235, -104.61782455444336),

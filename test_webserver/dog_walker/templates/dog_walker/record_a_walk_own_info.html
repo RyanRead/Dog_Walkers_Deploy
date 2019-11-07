@@ -35,18 +35,16 @@
     <div class="col-sm-2">
     </div>
     <div class="col-sm-8">
-        <form class="form">
-            <div class="form-row">
-                               <p>Which of your dogs completed the walk?</p>
-            </div>
-
+        <form class="form" action="{% url 'dog_walker-record_a_walk_saved_walking_route' %}" method="post"> {% csrf_token %}
             <div class="form_row">
-                {% for dog in dogs %}
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name='{{ dog }}' id="inlineCheckbox1" value="option1">
-                    <label class="form-check-label" for="inlineCheckbox1">{{ dog }}</label>
+                <div class="form-group col-sm-4">
+                  <label for="dog_name">Which Dog did you take on a Walk?</label>
+                   <select class="form-control" name="dog_name" id="dog_name">
+                    {% for dog in dogs %}
+                       <option value="{{ dog }}">{{ dog }}</option>
+                    {% endfor %}
+                   </select>
                 </div>
-                {% endfor %}
             </div>
              <br>
             <div class="form-row">
@@ -56,16 +54,16 @@
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="walk_start">When did you start your walk?</label>
-                    <input type="time" class="form-control" id="walk_start" value="12:00">
+                    <input type="time" class="form-control" name="walk_start" id="walk_start" value="12:00">
                 </div>
                  <div class="form-group col-sm-4">
                     <label for="walk_end">When did you end your walk?</label>
-                    <input type="time" class="form-control" id="walk_end" value="12:00">
+                    <input type="time" class="form-control" name="walk_end" id="walk_end" value="12:00">
                 </div>
             </div>
             <div class="form-row">
                  <label for="walk_date">What date did you complete the walk?</label>
-                    <input type="date" class="form-control" id="walk_date" value="2015-01-01" min="1980-01-01">
+                    <input type="date" class="form-control" name="walk_date" id="walk_date" value="2015-01-01" min="1980-01-01">
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Record Walk</button>

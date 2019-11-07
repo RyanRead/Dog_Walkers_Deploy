@@ -1,6 +1,6 @@
-from django.contrib import admin
 from .models import *
 from leaflet.admin import LeafletGeoAdmin
+from django.contrib import admin
 
 
 class PointOfInterestsAdmin(LeafletGeoAdmin):
@@ -40,4 +40,5 @@ admin.site.register(WalkingRoute, WalkingRouteAdmin)
 admin.site.register(WalkingClass, WalkingClassAdmin)
 admin.site.register(JoinedClass, JoinedClassAdmin)
 admin.site.register(RecordedExercise, RecordedExerciseAdmin)
+admin.site.register(Profile)
 

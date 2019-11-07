@@ -26,17 +26,23 @@
 <script type="text/javascript" src="{% static 'map/graphhopper.js' %}"></script>
 <script type="text/javascript">
     var i = 0;
-    function grab_point(point){
+    function grab_point(point, id){
         if(i == 0)
-            document.getElementById('start_point').value = point;
+            document.getElementById('start_point').value = id;
         else if(i == 1)
-            document.getElementById('middle_point_1').value = point;
-        else if(i == 2)
-            document.getElementById('middle_point_2').value = point;
-        else if(i == 3)
-            document.getElementById('middle_point_3').value = point;
-        else if(i == 4)
-            document.getElementById('end_point').value = point;
+            document.getElementById('end_point').value = id;
+        else if(i == 2){
+            document.getElementById('middle_point_1').value = document.getElementById('end_point').getValue();
+            document.getElementById('end_point').value = id;
+        }
+        else if(i == 3){
+            document.getElementById('middle_point_2').value = document.getElementById('end_point').getValue();
+            document.getElementById('end_point').value = id;
+        }
+        else if(i == 4){
+            document.getElementById('middle_point_3').value = document.getElementById('end_point').getValue();
+            document.getElementById('end_point').value = id;
+        }
         i++;
         var string_point = point.toString();
         var lng = parseFloat(string_point.slice(
@@ -53,7 +59,7 @@
         var stuff = L.Routing.control({
             waypoints: [
                  {% for point in points %}
-                 grab_point("{{ point }}"),
+                 grab_point("{{ point.location }}", {{ point.id }}),
                  {% endfor %}
             ],
             draggableWaypoints: false,
@@ -96,6 +102,7 @@
                 <input name="middle_point_3" id="middle_point_3" type="hidden">
                 <input name="end_point" id="end_point" type="hidden">
             </div>
+            <br/>
             <button class="btn btn-primary" type="submit">Save The Route</button>
         </form>
     </div>

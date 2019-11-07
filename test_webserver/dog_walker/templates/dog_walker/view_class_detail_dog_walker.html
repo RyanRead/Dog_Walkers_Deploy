@@ -23,81 +23,96 @@ Current Role: Dog Walker
          #gis {width: 100%; height: 600px;}
 
 
+
 </style>
 <script type="text/javascript" src="{% static 'map/leaflet.ajax.js' %}"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script type="text/javascript" src="{% static 'map/graphhopper.js' %}"></script>
 <script type="text/javascript">
-        function grab_point(point){
-            var string_point = point.toString();
-            var lng = parseFloat(string_point.slice(
-                string_point.indexOf('(') + 1,
-                string_point.lastIndexOf(' ')));
-            var lat = parseFloat(string_point.slice(
-                string_point.lastIndexOf(' '),
-                string_point.lastIndexOf(')')));
-            return L.latLng(lat, lng);
-        }
-        var key = "9aea8a48-eb69-493c-86b7-e3a4feb8c0d6";
-        function add_points(map, options){
-            L.Routing.control({
+    function grab_point(point){
+        var string_point = point.toString();
+        var lng = parseFloat(string_point.slice(
+            string_point.indexOf('(') + 1,
+            string_point.lastIndexOf(' ')));
+        var lat = parseFloat(string_point.slice(
+            string_point.lastIndexOf(' '),
+            string_point.lastIndexOf(')')));
+        return L.latLng(lat, lng);
+    }
+
+    var key = "9aea8a48-eb69-493c-86b7-e3a4feb8c0d6";
+    function add_points(map, options){
+        var stuff = L.Routing.control({
             waypoints: [
-             grab_point("{{ start_point }}"),
-             grab_point("{{ end_point }}")
+                 {% for point in points %}
+                 grab_point("{{ point }}"),
+                 {% endfor %}
             ],
+            draggableWaypoints: false,
+            addWaypoints: false,
             router: L.Routing.graphHopper(key , {
                 urlParameters: {
                     vehicle: 'foot'
                 }
-            })
-            }).addTo(map);
-        }
+            }),
+            routeWhileDragging: false
+        }).addTo(map);
+    }
 
+    function submit_form(class_id) {
+        document.getElementById('class_id').value = class_id;
+        document.getElementById('my_form').submit();
+    }
 
 </script>
 
 
 <div class="row">
     <div class="col-sm-8">
-        {% leaflet_map "gis" callback="window.add_points" %}
+        <div class="border border-dark">
+            {% leaflet_map "gis" callback="window.add_points" %}
+        </div>
     </div>
     <div class="col-sm-4">
-    <table class="table">
-        <tbody>
-         <tr>
-             <th scope="row">Class Name</th>
-             <td>Name</td>
-        </tr>
-        <tr>
-             <th scope="row">Instructor</th>
-             <td>Instructor</td>
-        </tr>
-        <tr>
-            <th scope="row">Date</th>
-            <td>November 30th 2019</td>
-        </tr>
-        <tr>
-            <th scope="row">Time</th>
-            <td>1:00 PM</td>
-        </tr>
-        <tr>
-            <th scope="row">Duration</th>
-            <td>60 Mins</td>
-        </tr>
-        <tr>
-            <th scope="row">Current Registered</th>
-            <td>7</td>
-        </tr>
-        <tr>
-            <th scope="row">Max Registered</th>
-            <td>8</td>
-        </tr>
-        </tbody>
-    </table>
-    <button class="btn btn-primary"> Join The Class</button>
+        <table class="table table-dark">
+            <tbody>
+            <tr>
+                <th scope="row">Class Name</th>
+                <td>{{ class.class_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Instructor</th>
+                <td>{{ class.class_instructor.first_name }} {{ class.class_instructor.last_name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Date</th>
+                <td>{{ class.class_date }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Time</th>
+                <td>{{ class.class_time }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Duration</th>
+                <td>{{ class.walking_route_id.walking_route_duration }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Current Registered</th>
+                <td>shit</td>
+            </tr>
+            <tr>
+                <th scope="row">Max Registered</th>
+                <td>{{ class.class_max_participants }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary" onclick="submit_form('{{ class.id }}')">> Join The Class</button>
     </div>
 </div>
+<form class="form" id="my_form" action="../../walking_classes/" method="post">{% csrf_token %}
+    <input type="hidden" id="class_id" name="class_id" value="">
+</form>
 
 
 {% endblock content %}

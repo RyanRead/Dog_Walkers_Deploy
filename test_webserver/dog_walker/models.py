@@ -4,12 +4,6 @@ from django.contrib.auth.models import User
 
 
 class PointOfInterests(models.Model):
-    CATERGORY = [
-        ('', ''),
-        ('', ''),
-        ('', ''),
-        ('', ''),
-    ]
     name = models.CharField(max_length=100)
     description = models.TextField()
     creator = models.ForeignKey(User, on_delete=False)
@@ -45,7 +39,7 @@ class Dogs(models.Model):
     dog_breed_id = models.ForeignKey(DogBreeds, on_delete=False)
     dog_age = models.PositiveSmallIntegerField()
     dog_weight = models.PositiveSmallIntegerField()
-    dog_image = models.CharField(max_length=100)
+    dog_image = models.ImageField(default='default.jpg', upload_to='dogs')
 
     def __str__(self):
         return self.dog_name
@@ -56,6 +50,7 @@ class Dogs(models.Model):
 
 
 class WalkingRoute(models.Model):
+    # TODO DO THIS
     ROUTE_TYPES = [
         ('Leisure', 'Leisure'),
         ('Training', 'Training')
@@ -92,10 +87,9 @@ class WalkingClass(models.Model):
     class_instructor = models.ForeignKey(User, on_delete=False)
     walking_route_id = models.ForeignKey(WalkingRoute, on_delete=False)
     class_date = models.DateField()
-    class_time = models.DateTimeField()
+    class_time = models.TimeField()
+    class_participants = models.PositiveSmallIntegerField()
     class_max_participants = models.PositiveSmallIntegerField()
-    class_full = models.BooleanField(default=False)
-    class_description = models.CharField(max_length=100)
 
     def __str__(self):
         return self.class_name
@@ -118,3 +112,15 @@ class RecordedExercise(models.Model):
     dog_id = models.ForeignKey(Dogs, on_delete='false')
     exercise_date = models.DateField()
     exercise_duration = models.PositiveSmallIntegerField()
+
+    class Meta:
+        verbose_name = 'Recorded Exercise'
+        verbose_name_plural = 'Recorded Exercise'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_trainer = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'

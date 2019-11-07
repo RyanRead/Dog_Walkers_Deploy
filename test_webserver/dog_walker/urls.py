@@ -1,7 +1,9 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views, datasets
+
 urlpatterns = [
+
     # Pages
     path('', auth_views.LoginView.as_view(template_name='dog_walker/login.html'), name='dog_walker-login'),
     path('home/', views.home, name='dog_walker-home'),
@@ -24,8 +26,8 @@ urlpatterns = [
     path('create_walking_class/', views.dog_trainer_create_a_class, name='dog_trainer-create_walking_class'),
     path('walking_classes/', views.walking_classes, name='dog_walker-walking_classes'),
     path('my_classes/', views.dog_trainer_my_classes, name='dog_trainer-my_classes'),
-    path('view_class_detail_dog_walker/', views.view_class_detail_dog_walker, name='dog_walker-view_class_detail_dog_walker'),
-    path('view_class_detail_dog_trainer/', views.view_class_detail_dog_trainer, name='dog_walker-view_class_detail_dog_trainer'),
+    path('view_class_detail_dog_walker/<instructor>\'s-<class_name>/', views.view_class_detail_dog_walker, name='dog_walker-view_class_detail'),
+    path('view_class_detail_dog_trainer/<class_name>/', views.view_class_detail_dog_trainer, name='dog_trainer-view_class_detail'),
     path('dog_trainer_home/', views.dog_trainer_home, name='dog_trainer-home'),
 
     # Datasets

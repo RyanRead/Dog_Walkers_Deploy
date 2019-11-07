@@ -5,6 +5,9 @@ class Product():
     def get_message(self):
         return self.message
 
+'''
+ERRORS
+'''
 
 class ConcreteProductErrorEmptyField(Product):
     message = "You Must fill in all fields"
@@ -13,6 +16,17 @@ class ConcreteProductErrorEmptyField(Product):
 class ConcreteProductErrorMustBeImage(Product):
     message = "The File you Uploaded must be an Image"
 
+
+class ConcreteProductErrorFullClass(Product):
+    message = "Cannot Join Class as it is Full"
+
+
+class ConcreteProductErrorPoi(Product):
+    message = "Select a Marker on the Map"
+
+'''
+SUCCESS
+'''
 
 class ConcreteProductSuccessAddDog(Product):
     message = "You Successfully Added A Dog"
@@ -28,6 +42,18 @@ class ConcreteProductSuccessSaveLeisureWalkingRoute(Product):
 
 class ConcreteProductSuccessSaveTrainingWalkingRoute(Product):
     message = "You Successfully Saved a Training Walking Route"
+
+
+class ConcreteProductSuccessSaveTrainingRecordExercise(Product):
+    message = "You Successfully Recorded your Walk"
+
+
+class ConcreteProductSuccessSaveWalkingClass(Product):
+    message = "You Successfully Saved a New Walking Class"
+
+
+class ConcreteProductSuccessJoinClass(Product):
+    message = "You Successfully Joined Walking Class"
 
 
 class Creator:
@@ -49,6 +75,15 @@ class ConcreteSuccessMessageCreator(Creator):
         elif type == "save_training_route":
             success_save_training_route = ConcreteProductSuccessSaveTrainingWalkingRoute()
             return success_save_training_route
+        elif type == "save_exercise":
+            success_record_exercise = ConcreteProductSuccessSaveTrainingRecordExercise()
+            return success_record_exercise
+        elif type == "save_walking_class":
+            success_walking_class = ConcreteProductSuccessSaveWalkingClass()
+            return success_walking_class
+        elif type == "join_walking_class":
+            success_saving_class = ConcreteProductSuccessJoinClass()
+            return success_saving_class
 
 
 class ConcreteErrorMessageCreator(Creator):
@@ -59,3 +94,9 @@ class ConcreteErrorMessageCreator(Creator):
         elif type == "not_image":
             error_not_image = ConcreteProductErrorMustBeImage()
             return error_not_image
+        elif type == "full_class":
+            error_full_class = ConcreteProductErrorFullClass()
+            return error_full_class
+        elif type == "add_poi":
+            error_poi = ConcreteProductErrorPoi()
+            return error_poi

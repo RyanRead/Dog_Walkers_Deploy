@@ -1,13 +1,20 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import *
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
-    isTrainer = forms.BooleanField(label="Are You a Dog Trainer?")
-
+    first_name = forms.CharField(max_length=20)
+    last_name = forms.CharField(max_length=20)
 
     class Meta:
         model = User
-        # fields = ['username', 'email', 'password1', 'password2', 'isTrainer']
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
+
+class IsTrainerForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['is_trainer']
+        labels = {'is_trainer': 'Are you a dog trainer?'}

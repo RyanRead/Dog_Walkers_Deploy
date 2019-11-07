@@ -19,10 +19,6 @@ class ConcreteSubject(Subject):
     walking_classes = []
 
     def register(self, observer):
-        # for observer in self.observer_list:
-        #     if observer.email == observer.email:
-        #         return
-        # print("Adding Observer " + observer.email)
         self.observer_list.append(observer)
 
     def remove(self, observer):
@@ -45,11 +41,10 @@ class Observer:
 
 
 class ConcreteObserver(Observer):
-    name = ''  # make private
-    email = ''  # make private
+    name = ''
+    email = ''
 
     def __init__(self, name, email):
-        """Initialize object state"""
         self.name = name
         self.email = email
 
@@ -67,8 +62,11 @@ class ConcreteObserver(Observer):
 
     def update(self, walking_class):
         print("Sending Email to " + self.get_name() + " at " + self.get_email())
-        # subject = 'This is an automated email. Please do not respond'
-        # message = 'The walking class ' + walking_class + ' has been added! \n Log In to see more details!'
+        subject = 'New Walking Class Posted'
+        message = 'The walking class ' + walking_class.class_name + ' has been added!' + \
+                  '\nInstructor : ' + walking_class.class_instructor.username + \
+                  '\nLog In to see more details!'
+        print(message)
         # email_from = settings.EMAIL_HOST_USER
         # recipient_list = [self.get_email()]
         # send_mail(subject, message, email_from, recipient_list)

@@ -29,17 +29,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!--loop for each entry -->
+                {% for class in classes %}
                 <tr>
-                    <td class="h3">Fun Dog Times</td>
-                    <td class="h3">November 30th 2019</td>
-                    <td class="h3">1:00 PM</td>
-                    <td class="h3">60 Mins</td>
-                    <td class="h3">Walk Around the Lake</td>
-                    <td class="h3">7</td>
-                    <td class="h3">8</td>
-                    <td><a href=# class="btn btn-primary">View More Details</a></td>
+                    <td class="h3">{{ class.class_name }}</td>
+                    <td class="h3">{{ class.class_date }}</td>
+                    <td class="h3">{{ class.class_time }}</td>
+                    <td class="h3">{{ class.walking_route_id.walking_route_duration }} Mins</td>
+                    <td class="h3">{{ class.walking_route_id.walking_route_name }}</td>
+                    <td class="h3">shit</td>
+                    <td class="h3">{{ class.class_max_participants }}</td>
+                    <td><a href="../view_class_detail_dog_trainer/{{ class.class_name }}/" class="btn btn-primary">View More Details</a></td>
                 </tr>
+                {% endfor %}
 
                 </tbody>
 

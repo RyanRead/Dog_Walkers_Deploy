@@ -23,39 +23,40 @@ Current Role: Dog Trainer
     <div class="col-sm-2">
     </div>
     <div class="col-sm-8">
-        <form class="form" method="post"> {% csrf_token %}
+        <form class="form" action="." method="post"> {% csrf_token %}
             <div class="form-row">
                 <div class="form-group col-sm-6">
                     <label for="class_route">Which Route Will the Class Take?</label>
-                    <select class="form-control" id="class_route">
-                        <!-- add loop for options -->
-                        <option value="route1">Cool Walk</option>
-                    </select>
+                   <select class="form-control" name="class_route" id="class_route">
+                        {% for route in routes %}
+                         <option value="{{ route }}">{{ route }}</option>
+                        {% endfor %}
+                   </select>
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="new_class_route">Want to Make a New Route?</label>
-                    <a id="new_class_route" href="#" class="btn btn-primary btn-lg form-control">Create A New Route</a>
+                    <a id="new_class_route" href="{% url 'dog_walker-generate_walking_route' %}" class="btn btn-primary btn-lg form-control">Create A New Route</a>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-sm-12">
                      <label for="class_name">What would you like to call your class?</label>
-                    <input type="text" class="form-control" id="class_name">
+                    <input type="text" class="form-control" name="class_name" id="class_name">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-sm-6">
                     <label for="class_start">When will the class begin?</label>
-                    <input type="time" class="form-control" id="class_start" value="12:00">
+                    <input type="time" class="form-control" name="class_start" id="class_start" value="12:00">
                 </div>
                 <div class="form-group col-sm-6">
                     <label for="class_date">What date is the class?</label>
-                    <input type="date" class="form-control" id="class_date">
+                    <input type="date" class="form-control" name="class_date" id="class_date">
                 </div>
             </div>
             <div class="form-row">
                 <label for="class_participants">What is the max amount of participants in the class?</label>
-                <select class="form-control" id="class_participants">
+                <select class="form-control" name="class_participants" id="class_participants">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -69,6 +70,12 @@ Current Role: Dog Trainer
                     <option value="11">11</option>
                     <option value="12">12</option>
                 </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-sm-12">
+                     <label for="class_description">Description :</label>
+                    <input type="text" class="form-control" name="class_description" id="class_description">
+                </div>
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Create Class</button>

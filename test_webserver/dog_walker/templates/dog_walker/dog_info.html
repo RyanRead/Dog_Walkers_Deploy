@@ -3,9 +3,6 @@
 <li class="nav-item">
     <a class="nav-link" href="{% url 'dog_walker-my_dogs_homepage' %}">My Dogs</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="#">Edit this Dogs Information</a>
-</li>
 
 {% endblock navbar %}
 
@@ -67,6 +64,10 @@
 var ctx = document.getElementById('dailyExercise').getContext('2d');
 ctx.height = 500;
 ctx.width = 500;
+var not_completed = {{ dog.exercise_needs }} - {{ exercise_today }};
+if (not_completed < 0)
+    not_completed = 0;
+
 var chart = new Chart(ctx, {
     type: 'doughnut',
     width:100,
@@ -74,19 +75,18 @@ var chart = new Chart(ctx, {
     data: {
         labels: ['Completed', 'Not Completed'],
         datasets: [{
-            data: [20, 10],
+            data: [{{ exercise_today }}, not_completed],
             backgroundColor: [
-                'rgba(0, 255, 0)',
+                'rgba(66, 165, 245)',
                 'rgba(255, 0, 0)'
                 ]
         }]
     },
-
     // Configuration options go here
     options: {
          legend: {
-                        onClick: (e) => e.stopPropagation()
-                    }
+            onClick: (e) => e.stopPropagation()
+         }
     }
 });
 
@@ -94,18 +94,26 @@ var ctx = document.getElementById('weeklyExercise').getContext('2d');
 var chart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        labels: [
+        {% for date in dates %}
+        '{{ date.date }}',
+        {% endfor %}
+        ],
         datasets:
         [{
             label: 'Daily Exercise Minutes',
-            data: [32, 13, 25, 42, 52, 22, 40],
+            data: [
+            {% for date in dates %}
+            {{ date.exercise }},
+            {% endfor %}
+            ],
             backgroundColor: 'green'
         }]
     },
     options: {
         legend: {
-                        onClick: (e) => e.stopPropagation()
-                    },
+            onClick: (e) => e.stopPropagation()
+        },
         scales:
         {
             yAxes:
@@ -126,9 +134,6 @@ var chart = new Chart(ctx, {
         }
     }
 });
-
-
-
 </script>
 
 {% endblock content %}

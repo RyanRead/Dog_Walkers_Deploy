@@ -5,18 +5,13 @@ from django.http import HttpResponse
 
 
 def point_of_interest_dataset(request):
-    data = serialize('geojson', PointOfInterests.objects.all())
+    points = []
+    for point in PointOfInterests.objects.filter(is_private=False):
+        points.append(point)
+    for point in PointOfInterests.objects.filter(is_private=True, creator=request.user):
+        points.append(point)
+    data = serialize('geojson', points)
     return HttpResponse(data, content_type='json')
-
-#
-# def dog_breed_dataset(request):
-#     data = DogBreeds.objects.all()
-#     return HttpResponse(data, content_type='json')
-#
-#
-# def dogs_dataset(request):
-#     data = Dogs.objects.all()
-#     return HttpResponse(data, content_type='json')
 
 
 

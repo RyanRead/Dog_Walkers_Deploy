@@ -28,6 +28,7 @@ Current Role: Dog Walker
         padding: 50px;
     }
 
+
 </style>
 
 <div class="row">
@@ -36,14 +37,13 @@ Current Role: Dog Walker
     <div class="col-sm-8">
         <form class="form" action="." method="post"> {% csrf_token %}
             <div class="form_row">
-                <div class="form-group col-sm-12">
-                    <label for="dog_name">Which Dog did you take on a Walk?</label>
-                    <select class="form-control" name="dog_name" id="dog_name">
-                        {% for dog in dogs %}
-                        <option value="{{ dog }}">{{ dog }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                <label for="dog_name">Which Dog did you take on a Walk?</label>
+                <select class="form-control" name="dog_name" id="dog_name">
+                    {% for dog in dogs %}
+                    <option value="{{ dog }}">{{ dog }}</option>
+                    {% endfor %}
+                </select>
+                <br>
             </div>
             <div class="form-row">
                 <div class="form-group col-sm-4">
@@ -90,6 +90,7 @@ var yyyy = today.getFullYear();
 today = yyyy+'-'+mm+'-'+dd;
 document.getElementById("walk_date").setAttribute("max", today);
 document.getElementById("walk_date").setAttribute("value", today);
+
 
 </script>
 {% endblock content %}

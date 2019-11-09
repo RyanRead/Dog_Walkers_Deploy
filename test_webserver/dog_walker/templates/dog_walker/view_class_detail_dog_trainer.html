@@ -7,10 +7,7 @@
 
 {% block navbar %}
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'dog_walker-generate_walking_route' %}">Create Walking Route</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'dog_walker-view_map' %}">View Map</a>
+    <a class="nav-link" href="{% url 'dog_trainer-my_classes' %}">My Classes</a>
 </li>
 {% endblock navbar %}
 
@@ -92,7 +89,7 @@
             </tr>
             <tr>
                 <th scope="row">Current Registered</th>
-                <td>shit</td>
+                <td>{{ class.class_participants }}</td>
             </tr>
             <tr>
                 <th scope="row">Max Registered</th>

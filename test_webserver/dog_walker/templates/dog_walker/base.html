@@ -6,12 +6,20 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <style>
         body {
-                padding-top: 75px;
-                padding-left: 30px;
-                padding-right: 30px;
-                padding-bottom: 20px;
-                background-color: lightblue;
-              }
+            padding-top: 75px;
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-bottom: 20px;
+            {% if bg_image %}
+            background: url("{{ bg_image }}")no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+            {% else %}
+            background-color: lightblue;
+            {% endif %}
+        }
         *.btn-block { padding: 40% 0;  }
         *.alert {
           padding: 50px;

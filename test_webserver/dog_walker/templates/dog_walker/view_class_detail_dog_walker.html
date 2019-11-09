@@ -1,16 +1,13 @@
 {% extends "dog_walker/base.html" %}
 {% block role %}
-Current Role: Dog Walker
+Current Role: Dog Owner
 {% endblock role %}
 {% load static %}
 {% load leaflet_tags %}
 
 {% block navbar %}
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'dog_walker-generate_walking_route' %}">Create Walking Route</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'dog_walker-view_map' %}">View Map</a>
+    <a class="nav-link" href="{% url 'dog_walker-walking_classes' %}">View Other Classes</a>
 </li>
 {% endblock navbar %}
 
@@ -95,11 +92,11 @@ Current Role: Dog Walker
             </tr>
             <tr>
                 <th scope="row">Duration</th>
-                <td>{{ class.walking_route_id.walking_route_duration }}</td>
+                <td>{{ class.walking_route_id.walking_route_duration }} mins</td>
             </tr>
             <tr>
                 <th scope="row">Current Registered</th>
-                <td>shit</td>
+                <td>{{ class.class_participants }}</td>
             </tr>
             <tr>
                 <th scope="row">Max Registered</th>

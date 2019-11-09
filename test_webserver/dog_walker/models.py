@@ -39,7 +39,7 @@ class Dogs(models.Model):
     dog_breed_id = models.ForeignKey(DogBreeds, on_delete=False)
     dog_age = models.PositiveSmallIntegerField()
     dog_weight = models.PositiveSmallIntegerField()
-    dog_image = models.ImageField(default='default.jpg', upload_to='dogs')
+    dog_image = models.CharField(default='default.jpg', max_length=100)
 
     def __str__(self):
         return self.dog_name

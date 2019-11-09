@@ -18,16 +18,25 @@ users = User.objects.all()
 for my_user in users:
     walking_class_subjects.register(ConcreteObserver(my_user.username, my_user.email))
 
+map_image = 'https://www.wallpaperflare.com/static/824/73/301/nature-path-blurred-green-wallpaper.jpg'
 
 @login_required
 def home(request):
     # TODO Add user to list if their not in the list
-    return render(request, 'dog_walker/home.html')
+    content = {
+        'title': '',
+        'bg_image': 'https://westernfinancialgroup.ca/get/files/image/galleries/DoNotLeaveYourDogInAHotCar.jpg'
+    }
+    return render(request, 'dog_walker/home.html', content)
 
 
 @login_required
 def dog_trainer_home(request):
-    return render(request, 'dog_walker/dog_trainer_home.html', {'title': 'Dog Trainer Home'})
+    content = {
+        'title': 'Dog Trainer Home',
+        'bg_image': 'https://www.companiondogtraining.com.au/wp-content/uploads/2018/08/banner1.jpg',
+    }
+    return render(request, 'dog_walker/dog_trainer_home.html', content)
 
 
 def register(request):
@@ -58,8 +67,11 @@ def register(request):
 
 @login_required
 def view_map(request):
-    print(request.user)
-    return render(request, 'dog_walker/view_map.html', {'title': 'View Map'})
+    content = {
+        'title': 'View Map',
+        'bg_image': map_image
+    }
+    return render(request, 'dog_walker/view_map.html', content)
 
 
 @login_required
@@ -93,6 +105,7 @@ def add_a_dog(request):
         dog_breeds.append(dog_breed.breed_name)
     content = {
         'title': 'Add A Dog',
+        'bg_image': 'https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2018/11/ob_181d10_uneviedechiotno-preview-2300-e1541931922505.jpg',
         'dog_breeds': dog_breeds,
     }
     return render(request, 'dog_walker/add_a_dog.html', content)
@@ -116,8 +129,11 @@ def add_a_poi(request):
             PointOfInterests.objects.create(**temp_dict)
             messages.success(request, success_factory.createProduct("add_poi").get_message())
             return redirect('dog_walker-view_map')
-
-    return render(request, 'dog_walker/add_a_poi.html', {'title': 'Add A POI'})
+    content = {
+        'title': 'Add Marker',
+        'bg_image': map_image,
+    }
+    return render(request, 'dog_walker/add_a_poi.html', content)
 
 
 @login_required
@@ -141,9 +157,11 @@ def my_dogs_homepage(request):
         )
     content = {
         'title': 'My Dogs',
+        'bg_image': 'http://www.hdnicewallpapers.com/Walls/Big/Dog/2_Cute_Dog_Puppy_5K_Wallpaper.jpg',
         'dogs': dogs,
     }
     return render(request, 'dog_walker/my_dogs_homepage.html', content)
+
 
 @login_required
 def dog_info(request, dog_name='default'):
@@ -151,7 +169,7 @@ def dog_info(request, dog_name='default'):
     selected_dog = Dogs.objects.filter(user_id=current_user, dog_name=dog_name)[0]
     dates = []
     exercise_today = 0
-    for i in range(7):
+    for i in range(7, -1, -1):
         temp_date = date.today() - timedelta(days=i)
         total_exercise = 0
         for exercise in RecordedExercise.objects.filter(dog_id=selected_dog, exercise_date=temp_date):
@@ -175,6 +193,7 @@ def dog_info(request, dog_name='default'):
     }
     content = {
         'title': 'Dog Info',
+        'bg_image': 'https://www.wallpaperflare.com/static/824/73/301/nature-path-blurred-green-wallpaper.jpg',
         'dog': dog,
         'dates': dates,
         'exercise_today': exercise_today,
@@ -222,9 +241,11 @@ def display_route(request):
 
     content = {
         'title': 'Display Route',
+        'bg_image': map_image,
         'points': points
     }
     return render(request, 'dog_walker/display_route.html', content)
+
 
 @login_required
 def generate_walking_route(request):
@@ -234,6 +255,7 @@ def generate_walking_route(request):
         point_names.append(point.name)
     content = {
         'title': 'Make Walking Route',
+        'bg_image': map_image,
         'point_names': point_names,
     }
     return render(request, 'dog_walker/generate_walking_route.html', content)
@@ -241,7 +263,11 @@ def generate_walking_route(request):
 
 @login_required
 def record_a_walk(request):
-    return render(request, 'dog_walker/record_a_walk.html', {'title': 'Record A Walk'})
+    content = {
+        'title': 'Record A Walk',
+        'bg_image': 'https://www.natureofthedog.com/wp-content/uploads/2017/12/NOTD_12.png'
+    }
+    return render(request, 'dog_walker/record_a_walk.html', content)
 
 
 @login_required
@@ -253,6 +279,7 @@ def record_a_walk_own_info(request):
         dogs.append(dog.dog_name)
     content = {
         'title': 'Record A Walk',
+        'bg_image': 'https://www.natureofthedog.com/wp-content/uploads/2017/12/NOTD_12.png',
         'dogs': dogs,
     }
     return render(request, 'dog_walker/record_a_walk_own_info.html', content)
@@ -286,6 +313,7 @@ def record_a_walk_saved_walking_route(request):
         routes.append(route.walking_route_name)
     content = {
         'title': 'Record A Walk',
+        'bg_image': 'https://www.natureofthedog.com/wp-content/uploads/2017/12/NOTD_12.png',
         'dogs': dogs,
         'routes': routes,
     }
@@ -302,17 +330,22 @@ def walking_classes(request):
             'user_id': current_user,
             'class_id': class_object
         }
-        if class_object.class_participants < class_object.class_max_participants:
+        if class_object.class_instructor == current_user:
+            messages.error(request, error_factory.createProduct("your_class").get_message())
+        elif JoinedClass.objects.filter(user_id=current_user, class_id=class_object):
+            messages.error(request, error_factory.createProduct("already_registered").get_message())
+        elif class_object.class_participants >= class_object.class_max_participants:
+            messages.error(request, error_factory.createProduct("full_class").get_message())
+        else:
             class_object.class_participants += 1
             class_object.save()
             JoinedClass.objects.create(**join_class)
             messages.success(request, success_factory.createProduct("join_walking_class").get_message())
-        else:
-            messages.error(request, error_factory.createProduct("full_class").get_message())
 
     classes = WalkingClass.objects.all()
     content = {
         'title': 'Join A Class',
+        'bg_image': 'https://imgix.bustle.com/uploads/image/2018/7/26/8aeb6ee3-930b-45b3-b238-af67eb419090-best-dog-leashes-for-small-dogs.jpg',
         'classes': classes
     }
     return render(request, 'dog_walker/walking_classes.html', content)
@@ -328,6 +361,7 @@ def dog_trainer_my_classes(request):
 
     content = {
         'title': 'My Classes',
+        'bg_image': 'https://images.wagwalkingweb.com/media/training_guides/heel-6/hero/How-to-Train-Your-Stubborn-Dog-to-Heel.jpg',
         'classes': classes,
     }
     return render(request, 'dog_walker/my_classes.html', content)
@@ -351,6 +385,7 @@ def view_class_detail_dog_trainer(request, class_name):
     print(points)
     content = {
         'title': 'Dog Trainer Class',
+        'bg_image': map_image,
         'class': class_object,
         'points': points
     }
@@ -375,6 +410,7 @@ def view_class_detail_dog_walker(request, instructor, class_name):
     print(points)
     content = {
         'title': 'Dog Trainer Class',
+        'bg_image': map_image,
         'class': class_object,
         'points': points
     }
@@ -391,10 +427,9 @@ def dog_trainer_create_a_class(request):
             'class_instructor': current_user,
             'walking_route_id': WalkingRoute.objects.filter(walking_route_name=request.POST.get('class_route'))[0],
             'class_date': request.POST.get('class_date'),
-            'class_time': request.POST.get('class_date') + ' ' + request.POST.get('class_start'),
-            'class_max_participants': request.POST.get('class_participants'),
-            'class_full': False,
-            'class_description': request.POST.get('class_description')
+            'class_time': request.POST.get('class_start'),
+            'class_participants': 0,
+            'class_max_participants': request.POST.get('class_max_participants'),
         }
         WalkingClass.objects.create(**class_dict)
         messages.success(request, success_factory.createProduct("save_walking_class").get_message())
@@ -411,6 +446,7 @@ def dog_trainer_create_a_class(request):
 
     content = {
         'title': 'Create A Class',
+        'bg_image': 'https://thehappypuppysite.com/wp-content/uploads/2016/03/dog-training-methods.jpg',
         'routes': routes
     }
     return render(request, 'dog_walker/create_walking_class.html', content)

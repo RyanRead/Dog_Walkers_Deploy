@@ -2,7 +2,7 @@
 {% block navbar %}
 {% endblock navbar %}
 {% block role %}
-Current Role: Dog Walker
+Current Role: Dog Owner
 {% endblock role %}
 {% block content %}
 
@@ -21,7 +21,7 @@ Current Role: Dog Walker
             <h1 class="display-2">Join A Class</h1>
         </div>
         <div class="row" style="padding-top: 20px;">
-            <table class="table table-hover table-striped table-dark">
+            <table class="table table-hover table-striped table-dark" style="opacity:0.9">
                 <thead>
                 <tr>
                     <th scope="col" class="h1">Class Name</th>
@@ -45,7 +45,7 @@ Current Role: Dog Walker
                     <td class="h3">{{ class.class_time }}</td>
                     <td class="h3">{{ class.walking_route_id.walking_route_duration }} Mins</td>
                     <td class="h3">{{ class.walking_route_id.walking_route_name }}</td>
-                    <td class="h3">shit</td>
+                    <td class="h3">{{ class.class_participants }}</td>
                     <td class="h3">{{ class.class_max_participants }}</td>
                     <td><a href="../view_class_detail_dog_walker/{{ class.class_instructor }}'s-{{ class.class_name }}/" class="btn btn-primary">View More Details</a></td>
                     <td><button class="btn btn-primary" onclick="submit_form('{{ class.id }}')"> Join The Class</button></td>

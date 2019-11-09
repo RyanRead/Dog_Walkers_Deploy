@@ -24,6 +24,15 @@ class ConcreteProductErrorFullClass(Product):
 class ConcreteProductErrorPoi(Product):
     message = "Select a Marker on the Map"
 
+
+class ConcreteProductErrorAlreadyRegistered(Product):
+    message = "You are Already Registered for this Class"
+
+
+class ConcreteProductErrorYourWalkingClass(Product):
+    message = "You cannot Register for your own Class"
+
+
 '''
 SUCCESS
 '''
@@ -100,3 +109,9 @@ class ConcreteErrorMessageCreator(Creator):
         elif type == "add_poi":
             error_poi = ConcreteProductErrorPoi()
             return error_poi
+        elif type == "already_registered":
+            error_already_registered = ConcreteProductErrorAlreadyRegistered()
+            return error_already_registered
+        elif type == "your_class":
+            error_your_class = ConcreteProductErrorYourWalkingClass()
+            return error_your_class

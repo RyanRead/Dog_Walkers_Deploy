@@ -3,7 +3,9 @@
 Current Role: Dog Trainer
 {% endblock role %}
 {% block navbar %}
-
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'dog_trainer-my_classes' %}">My Classes</a>
+</li>
 {% endblock navbar %}
 {% block content %}
 
@@ -14,9 +16,10 @@ Current Role: Dog Trainer
     }
     .form
     {
-        background-color:pink;
-        padding: 50px;
+        background-color:rgba(180,180,180,0.7);
+        padding: 80px;
     }
+
 </style>
 
 <div class="row">
@@ -55,8 +58,8 @@ Current Role: Dog Trainer
                 </div>
             </div>
             <div class="form-row">
-                <label for="class_participants">What is the max amount of participants in the class?</label>
-                <select class="form-control" name="class_participants" id="class_participants">
+                <label for="class_max_participants">What is the max amount of participants in the class?</label>
+                <select class="form-control" name="class_max_participants" id="class_max_participants">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -71,12 +74,7 @@ Current Role: Dog Trainer
                     <option value="12">12</option>
                 </select>
             </div>
-            <div class="form-row">
-                <div class="form-group col-sm-12">
-                     <label for="class_description">Description :</label>
-                    <input type="text" class="form-control" name="class_description" id="class_description">
-                </div>
-            </div>
+            <br>
             <br>
             <button type="submit" class="btn btn-primary">Create Class</button>
         </form>

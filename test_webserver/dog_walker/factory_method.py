@@ -10,11 +10,11 @@ ERRORS
 '''
 
 class ConcreteProductErrorEmptyField(Product):
-    message = "You Must fill in all fields"
+    message = "You Must Fill in All fields"
 
 
 class ConcreteProductErrorMustBeImage(Product):
-    message = "The File you Uploaded must be an Image"
+    message = "Invalid Image, Using Default"
 
 
 class ConcreteProductErrorFullClass(Product):
@@ -30,7 +30,7 @@ class ConcreteProductErrorAlreadyRegistered(Product):
 
 
 class ConcreteProductErrorYourWalkingClass(Product):
-    message = "You cannot Register for your own Class"
+    message = "You cannot Register for Your Own Class"
 
 
 '''

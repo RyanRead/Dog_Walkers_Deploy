@@ -32,6 +32,4 @@ urlpatterns = [
 
     # Datasets
     path('point_of_interest_dataset/', datasets.point_of_interest_dataset, name='poi_dataset'),
-    # path('dog_breed_dataset/', datasets.dog_breed_dataset, name='dog_breed_dataset'),
-    # path('dogs_dataset/', datasets.dogs_dataset, name='dogs_dataset'),
 ]

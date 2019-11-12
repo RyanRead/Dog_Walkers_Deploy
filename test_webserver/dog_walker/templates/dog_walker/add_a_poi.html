@@ -1,7 +1,9 @@
 {% extends "dog_walker/base.html" %}
 {% load static %}
 {% load leaflet_tags %}
-
+{% block role %}
+    Current Role: Dog Owner
+{% endblock %}
 {% block navbar %}
 <li class="nav-item">
     <a class="nav-link" href="{% url 'dog_walker-view_map' %}">View Map</a>

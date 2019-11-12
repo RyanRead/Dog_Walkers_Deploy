@@ -6,10 +6,10 @@ from django.contrib.auth.models import User
 class PointOfInterests(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    creator = models.ForeignKey(User, on_delete=False)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.PointField(srid=4326)
     category = models.CharField(max_length=20)
-    is_private = models.BooleanField(default=False)
+    is_private = models.BooleanField()
 
     def __str__(self):
         return self.name
@@ -34,9 +34,9 @@ class DogBreeds(models.Model):
 
 
 class Dogs(models.Model):
-    user_id = models.ForeignKey(User, on_delete=False)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     dog_name = models.CharField(max_length=100)
-    dog_breed_id = models.ForeignKey(DogBreeds, on_delete=False)
+    dog_breed_id = models.ForeignKey(DogBreeds, on_delete=models.CASCADE)
     dog_age = models.PositiveSmallIntegerField()
     dog_weight = models.PositiveSmallIntegerField()
     dog_image = models.CharField(default='default.jpg', max_length=100)
@@ -58,15 +58,15 @@ class WalkingRoute(models.Model):
     walking_route_name = models.CharField(max_length=25)
 
     walking_route_start = models.ForeignKey(
-        PointOfInterests, related_name='StartPoint', null=False, on_delete=True)
+        PointOfInterests, related_name='StartPoint', null=False, on_delete=models.CASCADE)
     walking_route_middle_1 = models.ForeignKey(
-        PointOfInterests, related_name='Stop1', null=True, blank=True, on_delete=True)
+        PointOfInterests, related_name='Stop1', null=True, blank=True, on_delete=models.CASCADE)
     walking_route_middle_2 = models.ForeignKey(
-        PointOfInterests, related_name='Stop2', null=True, blank=True, on_delete=True)
+        PointOfInterests, related_name='Stop2', null=True, blank=True, on_delete=models.CASCADE)
     walking_route_middle_3 = models.ForeignKey(
-        PointOfInterests, related_name='Stop3', null=True, blank=True, on_delete=True)
+        PointOfInterests, related_name='Stop3', null=True, blank=True, on_delete=models.CASCADE)
     walking_route_end = models.ForeignKey(
-        PointOfInterests, related_name='EndPoint', null=False, on_delete=True)
+        PointOfInterests, related_name='EndPoint', null=False, on_delete=models.CASCADE)
 
     walking_route_duration = models.PositiveSmallIntegerField()
     walking_route_type = models.CharField(max_length=10,
@@ -84,8 +84,8 @@ class WalkingRoute(models.Model):
 
 class WalkingClass(models.Model):
     class_name = models.CharField(max_length=20)
-    class_instructor = models.ForeignKey(User, on_delete=False)
-    walking_route_id = models.ForeignKey(WalkingRoute, on_delete=False)
+    class_instructor = models.ForeignKey(User, on_delete=models.CASCADE)
+    walking_route_id = models.ForeignKey(WalkingRoute, on_delete=models.CASCADE)
     class_date = models.DateField()
     class_time = models.TimeField()
     class_participants = models.PositiveSmallIntegerField()
@@ -100,8 +100,8 @@ class WalkingClass(models.Model):
 
 
 class JoinedClass(models.Model):
-    user_id = models.ForeignKey(User, on_delete=False)
-    class_id = models.ForeignKey(WalkingClass, on_delete=False)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    class_id = models.ForeignKey(WalkingClass, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Joined Classes'
@@ -109,7 +109,7 @@ class JoinedClass(models.Model):
 
 
 class RecordedExercise(models.Model):
-    dog_id = models.ForeignKey(Dogs, on_delete='false')
+    dog_id = models.ForeignKey(Dogs, on_delete=models.CASCADE)
     exercise_date = models.DateField()
     exercise_duration = models.PositiveSmallIntegerField()
 

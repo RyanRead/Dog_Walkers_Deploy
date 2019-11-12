@@ -1,3 +1,4 @@
+import os
 from .models import *
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -8,7 +9,6 @@ from .factory_method import *
 from django.core.files.storage import FileSystemStorage
 from datetime import date, timedelta
 
-
 success_factory = ConcreteSuccessMessageCreator()
 error_factory = ConcreteErrorMessageCreator()
 
@@ -16,13 +16,13 @@ walking_class_subjects = ConcreteSubject()
 users = User.objects.all()
 
 for my_user in users:
-    walking_class_subjects.register(ConcreteObserver(my_user.username, my_user.email))
+    walking_class_subjects.register(ConcreteObserver(my_user.first_name, my_user.email))
 
 map_image = 'https://www.wallpaperflare.com/static/824/73/301/nature-path-blurred-green-wallpaper.jpg'
 
+
 @login_required
 def home(request):
-    # TODO Add user to list if their not in the list
     content = {
         'title': '',
         'bg_image': 'https://westernfinancialgroup.ca/get/files/image/galleries/DoNotLeaveYourDogInAHotCar.jpg'
@@ -30,7 +30,7 @@ def home(request):
     return render(request, 'dog_walker/home.html', content)
 
 
-@login_required
+# @login_required
 def dog_trainer_home(request):
     content = {
         'title': 'Dog Trainer Home',
@@ -52,6 +52,8 @@ def register(request):
                 if profile.user.username == new_user_name:
                     profile.is_trainer = is_t
                     profile.save()
+                    walking_class_subjects.register(ConcreteObserver(
+                        profile.user.first_name, profile.user.email))
         return redirect('dog_walker-login')
     else:
         user_form = UserRegistrationForm()
@@ -65,7 +67,7 @@ def register(request):
     return render(request, 'dog_walker/register.html', content)
 
 
-@login_required
+# @login_required
 def view_map(request):
     content = {
         'title': 'View Map',
@@ -74,11 +76,12 @@ def view_map(request):
     return render(request, 'dog_walker/view_map.html', content)
 
 
-@login_required
+# @login_required
 def add_a_dog(request):
     if request.method == 'POST':
         age = 2019 - int(request.POST.get('dog_birthday')[:4])
-        if request.FILES['dog_image'].name is not None:
+        dog_image = request.FILES['dog_image'].name
+        if dog_image is not None and os.path.splitext(dog_image)[1] == '.png':
             dog_image = request.FILES['dog_image']
             dog_image_name = dog_image.name
             save_file = FileSystemStorage()
@@ -86,7 +89,6 @@ def add_a_dog(request):
         else:
             messages.error(request, error_factory.createProduct("not_image").get_message())
             dog_image_name = 'default.png'
-            return redirect('dog_walker-add_a_dog')
 
         temp_dict = {
             'user_id': User.objects.get_by_natural_key(request.user),
@@ -114,6 +116,7 @@ def add_a_dog(request):
 @login_required
 def add_a_poi(request):
     if request.method == 'POST':
+
         temp_dict = {
             'name': request.POST.get('name'),
             'description': request.POST.get('description'),
@@ -123,9 +126,15 @@ def add_a_poi(request):
             'category': request.POST.get('category'),
             'is_private': True if request.POST.get('is_private') == 'yes' else False,
         }
-        if not (request.POST.get('lng') and request.POST.get('lat')):
+        invalid = False
+        if not (temp_dict['name'] and temp_dict['category'] and temp_dict['description']):
+            messages.error(request, error_factory.createProduct("empty_field").get_message())
+            invalid = True
+        print('{}{}'.format(request.POST.get('lng'), request.POST.get('lat')))
+        if request.POST.get('lng') == '0' or request.POST.get('lat') == '0':
             messages.error(request, error_factory.createProduct("add_poi").get_message())
-        else:
+            invalid = True
+        if not invalid:
             PointOfInterests.objects.create(**temp_dict)
             messages.success(request, success_factory.createProduct("add_poi").get_message())
             return redirect('dog_walker-view_map')
@@ -134,11 +143,6 @@ def add_a_poi(request):
         'bg_image': map_image,
     }
     return render(request, 'dog_walker/add_a_poi.html', content)
-
-
-@login_required
-def generate_walking_route(request):
-    return render(request, 'dog_walker/generate_walking_route.html', {'title': 'Generate a Route'})
 
 
 @login_required
@@ -201,7 +205,7 @@ def dog_info(request, dog_name='default'):
     return render(request, 'dog_walker/dog_info.html', content)
 
 
-@login_required
+# @login_required
 def display_route(request):
     points = []
     if request.method == 'POST':
@@ -210,19 +214,26 @@ def display_route(request):
                 'walking_route_name': request.POST.get('route_name'),
                 'walking_route_start': PointOfInterests.objects.filter(id=request.POST.get('start_point'))[0],
                 'walking_route_middle_1':
-                    PointOfInterests.objects.filter(id=request.POST.get('middle_point_1')) if request.POST.get('middle_point_1') else None,
+                    PointOfInterests.objects.filter(id=request.POST.get('middle_point_1'))[0] if request.POST.get(
+                        'middle_point_1') else None,
                 'walking_route_middle_2':
-                    PointOfInterests.objects.filter(id=request.POST.get('middle_point_2')) if request.POST.get('middle_point_2') else None,
+                    PointOfInterests.objects.filter(id=request.POST.get('middle_point_2'))[0] if request.POST.get(
+                        'middle_point_2') else None,
                 'walking_route_middle_3':
-                    PointOfInterests.objects.filter(id=request.POST.get('middle_point_3')) if request.POST.get('middle_point_3') else None,
+                    PointOfInterests.objects.filter(id=request.POST.get('middle_point_3'))[0] if request.POST.get(
+                        'middle_point_3') else None,
                 'walking_route_end': PointOfInterests.objects.filter(id=request.POST.get('end_point'))[0],
                 'walking_route_duration': request.POST.get('duration'),
-                'walking_route_type': 'Leisure', #TODO Add both
+                'walking_route_type': 'Leisure',  # TODO Add both
                 'user_id': User.objects.get_by_natural_key(request.user)
             }
-            WalkingRoute.objects.create(**temp_dict)
-            messages.success(request, success_factory.createProduct("save_leisure_route").get_message())
-            return redirect('dog_walker-view_map')
+            if not temp_dict['walking_route_name']:
+                messages.error(request, 'Name field cannot be empty')
+                return redirect('dog_walker-generate_walking_route')
+            else:
+                WalkingRoute.objects.create(**temp_dict)
+                messages.success(request, success_factory.createProduct("save_leisure_route").get_message())
+                return redirect('dog_walker-view_map')
 
         start_point = PointOfInterests.objects.filter(name=request.POST.get('start_point'))[0]
         end_point = PointOfInterests.objects.filter(name=request.POST.get('end_point'))[0]
@@ -249,9 +260,13 @@ def display_route(request):
 
 @login_required
 def generate_walking_route(request):
-    poi_list = PointOfInterests.objects.all()
+    points = []
+    for point in PointOfInterests.objects.filter(is_private=False):
+        points.append(point)
+    for point in PointOfInterests.objects.filter(is_private=True, creator=request.user):
+        points.append(point)
     point_names = []
-    for point in poi_list:
+    for point in points:
         point_names.append(point.name)
     content = {
         'title': 'Make Walking Route',
@@ -298,12 +313,16 @@ def record_a_walk_saved_walking_route(request):
             'exercise_date': request.POST.get('walk_date'),
             'exercise_duration': duration,
         }
-        RecordedExercise.objects.create(**recorded_exercise)
-        messages.success(request, success_factory.createProduct("save_exercise").get_message())
-        return redirect('dog_walker-my_dogs_homepage')
+        if int(request.POST.get('walk_distance')) / duration > 0.2:
+            messages.error(request, 'It doesn\'t seem possible to walk this fast, please enter valid information')
+            return redirect('dog_walker-record_a_walk_own_info')
+        else:
+            RecordedExercise.objects.create(**recorded_exercise)
+            messages.success(request, success_factory.createProduct("save_exercise").get_message())
+            return redirect('dog_walker-my_dogs_homepage')
 
     dog_list = Dogs.objects.filter(user_id=current_user)
-    route_list = WalkingRoute.objects.all()
+    route_list = WalkingRoute.objects.filter(user_id=current_user)
     dogs = []
     routes = []
 
@@ -320,7 +339,7 @@ def record_a_walk_saved_walking_route(request):
     return render(request, 'dog_walker/record_a_walk_saved_walking_route.html', content)
 
 
-@login_required
+# @login_required
 def walking_classes(request):
     # TODO Dont display the button if registered or full
     current_user = request.user
@@ -439,7 +458,7 @@ def dog_trainer_create_a_class(request):
         walking_class_subjects.notify()
         return redirect('dog_trainer-home')
 
-    route_list = WalkingRoute.objects.all()
+    route_list = WalkingRoute.objects.filter(user_id=current_user)
     routes = []
     for route in route_list:
         routes.append(route.walking_route_name)

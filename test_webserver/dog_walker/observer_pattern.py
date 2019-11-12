@@ -63,10 +63,14 @@ class ConcreteObserver(Observer):
     def update(self, walking_class):
         print("Sending Email to " + self.get_name() + " at " + self.get_email())
         subject = 'New Walking Class Posted'
-        message = 'The walking class ' + walking_class.class_name + ' has been added!' + \
-                  '\nInstructor : ' + walking_class.class_instructor.username + \
+        message = 'Hi ' + self.get_name() + ',' + \
+            '\n\nThe walking class ' + walking_class.class_name + ' has been posted!' + \
+                  '\nInstructor : ' + walking_class.class_instructor.first_name +  ' ' + walking_class.class_instructor.last_name + \
+                  '\nDate : ' + str(walking_class.class_date) + \
+                  '\nTime : ' + str(walking_class.class_time) + \
+                  '\nSpots Remaining : ' + str(walking_class.class_max_participants - walking_class.class_participants) + \
                   '\nLog In to see more details!'
-        print(message)
-        # email_from = settings.EMAIL_HOST_USER
-        # recipient_list = [self.get_email()]
-        # send_mail(subject, message, email_from, recipient_list)
+        # print(message)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [self.get_email()]
+        send_mail(subject, message, email_from, recipient_list)

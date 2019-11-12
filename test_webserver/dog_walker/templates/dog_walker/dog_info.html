@@ -1,4 +1,7 @@
 {% extends "dog_walker/base.html" %}
+{% block role %}
+    Current Role: Dog Walker
+{% endblock role %}
 {% block navbar %}
 <li class="nav-item">
     <a class="nav-link" href="{% url 'dog_walker-my_dogs_homepage' %}">My Dogs</a>
@@ -8,7 +11,11 @@
 
 
 {% block content %}
-
+<style>
+    body{
+    color: black;
+    }
+</style>
 
 <div class="row">
     <div class="col-sm-6">
@@ -16,7 +23,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <img class="img-fluid border border-dark rounded" height="auto"
-                     src="{{ dog.image }}" alt="static/dogs/default.png">
+                     src="{{ dog.image }}" alt="Pic of Dog">
             </div>
             <div class="col-sm-6">
                 <h3>{{ dog.name }}</h3>
@@ -77,7 +84,7 @@ var chart = new Chart(ctx, {
         datasets: [{
             data: [{{ exercise_today }}, not_completed],
             backgroundColor: [
-                'rgba(66, 165, 245)',
+                'rgba(102, 102, 255)',
                 'rgba(255, 0, 0)'
                 ]
         }]
@@ -107,27 +114,35 @@ var chart = new Chart(ctx, {
             {{ date.exercise }},
             {% endfor %}
             ],
-            backgroundColor: 'rgba(66, 165, 245)'
+            backgroundColor: 'rgba(102, 102, 255)'
         }]
     },
     options: {
+
         legend: {
-            onClick: (e) => e.stopPropagation()
+            onClick: (e) => e.stopPropagation(),
+            display: true,
+            labels:{
+                fontColor: 'white'
+            },
         },
-        scales:
-        {
-            yAxes:
-            [{
-                ticks:
-                {
-                    beginAtZero: true
+        scales:{
+            yAxes:[{
+                ticks:{
+                    beginAtZero: true,
+                    fontColor: 'white'
+                },
+                gridLines:{
+                color: 'white'
                 }
             }],
-            xAxes:
-            [{
+            xAxes:[{
+                ticks:{
+                    fontColor: 'white'
+                },
                 barThickness: 150,
-                gridLines:
-                {
+                gridLines:{
+                    color: 'white',
                     offsetGridLines: true
                 }
             }]

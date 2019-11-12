@@ -19,6 +19,7 @@
             {% else %}
             background-color: lightblue;
             {% endif %}
+            color: white;
         }
         *.btn-block { padding: 40% 0;  }
         *.alert {
@@ -44,6 +45,7 @@
         {% block navbar %}
         {% endblock %}
         {% if user.is_authenticated %}
+
     </ul>
     <ul class="navbar-nav ml-auto">
       {% if user.profile.is_trainer == True %}

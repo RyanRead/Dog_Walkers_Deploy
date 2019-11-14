@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import boto3
 import os
 if os.name == 'nt':
     import platform
@@ -36,7 +37,7 @@ SECRET_KEY = 'a8$5%5e%xm3#gv*51mvw0#1=(c5d3w&5)wvlzbyepf37-xz)0q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['b220b4c4.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = ['4dfbe35d.ngrok.io', '127.0.0.1']
 
 
 # Application definition
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'crispy_forms',
     'leaflet',
+    'storages',
     'dog_walker.apps.DogWalkerConfig',
 ]
 
@@ -139,9 +141,21 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = 'dog_walker/static/dogs/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
-MEDIA_URL = 'images-by-url/'
+EMAIL_HOST_USER = 'dogwalkersregina@gmail.com'
+EMAIL_HOST_PASSWORD = 'GteA~cP3kCPl'
+
+AWS_ACCESS_KEY_ID = 'AKIA5ZNDKAVSZQUC2CXD'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'dog-walkers-files'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (50.44722980684235, -104.61782455444336),

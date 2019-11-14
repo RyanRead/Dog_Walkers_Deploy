@@ -30,7 +30,7 @@ def home(request):
     return render(request, 'dog_walker/home.html', content)
 
 
-# @login_required
+@login_required
 def dog_trainer_home(request):
     content = {
         'title': 'Dog Trainer Home',
@@ -67,7 +67,7 @@ def register(request):
     return render(request, 'dog_walker/register.html', content)
 
 
-# @login_required
+@login_required
 def view_map(request):
     content = {
         'title': 'View Map',
@@ -77,31 +77,42 @@ def view_map(request):
 
 
 # @login_required
+# def add_a_dog(request):
+#     if request.method == 'POST':
+#         age = 2019 - int(request.POST.get('dog_birthday')[:4])
+#         dog_image = request.FILES['dog_image'].name
+#         if dog_image is not None and os.path.splitext(dog_image)[1] == '.png':
+#             dog_image = request.FILES['dog_image']
+#             dog_image_name = dog_image.name
+#             save_file = FileSystemStorage()
+#             save_file.save(dog_image_name, dog_image)
+#         else:
+#             messages.error(request, error_factory.createProduct("not_image").get_message())
+#             dog_image_name = 'default.png'
+#
+#         temp_dict = {
+#             'user_id': User.objects.get_by_natural_key(request.user),
+#             'dog_name': request.POST.get('dog_name').capitalize(),
+#             'dog_breed_id': DogBreeds.objects.get(breed_name=request.POST.get('dog_breed')),
+#             'dog_age': age,
+#             'dog_weight': request.POST.get('dog_weight'),
+#             'dog_image': '/static/dogs/' + dog_image_name
+#         }
+#         Dogs.objects.create(**temp_dict)
+#         messages.success(request, success_factory.createProduct("add_dog").get_message())
+#         return redirect('dog_walker-my_dogs_homepage')
+#
+#     dog_breeds = []
+#     for dog_breed in DogBreeds.objects.all():
+#         dog_breeds.append(dog_breed.breed_name)
+#     content = {
+#         'title': 'Add A Dog',
+#         'bg_image': 'https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2018/11/ob_181d10_uneviedechiotno-preview-2300-e1541931922505.jpg',
+#         'dog_breeds': dog_breeds,
+#     }
+#     return render(request, 'dog_walker/add_a_dog.html', content)
+@login_required
 def add_a_dog(request):
-    if request.method == 'POST':
-        age = 2019 - int(request.POST.get('dog_birthday')[:4])
-        dog_image = request.FILES['dog_image'].name
-        if dog_image is not None and os.path.splitext(dog_image)[1] == '.png':
-            dog_image = request.FILES['dog_image']
-            dog_image_name = dog_image.name
-            save_file = FileSystemStorage()
-            save_file.save(dog_image_name, dog_image)
-        else:
-            messages.error(request, error_factory.createProduct("not_image").get_message())
-            dog_image_name = 'default.png'
-
-        temp_dict = {
-            'user_id': User.objects.get_by_natural_key(request.user),
-            'dog_name': request.POST.get('dog_name').capitalize(),
-            'dog_breed_id': DogBreeds.objects.get(breed_name=request.POST.get('dog_breed')),
-            'dog_age': age,
-            'dog_weight': request.POST.get('dog_weight'),
-            'dog_image': '/static/dogs/' + dog_image_name
-        }
-        Dogs.objects.create(**temp_dict)
-        messages.success(request, success_factory.createProduct("add_dog").get_message())
-        return redirect('dog_walker-my_dogs_homepage')
-
     dog_breeds = []
     for dog_breed in DogBreeds.objects.all():
         dog_breeds.append(dog_breed.breed_name)
@@ -110,8 +121,36 @@ def add_a_dog(request):
         'bg_image': 'https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2018/11/ob_181d10_uneviedechiotno-preview-2300-e1541931922505.jpg',
         'dog_breeds': dog_breeds,
     }
+    if request.method == 'POST':
+        age = 2019 - int(request.POST.get('dog_birthday')[:4])
+        dog_image = request.FILES['dog_image'].name
+        print(os.path.splitext(dog_image)[1])
+        if os.path.splitext(dog_image)[1] == '.png' or os.path.splitext(dog_image)[1] == '.jpg' or  os.path.splitext(dog_image)[1] == '.PNG' or os.path.splitext(dog_image)[1] == '.JPG':
+            dog_image = request.FILES['dog_image']
+            temp_dict = {
+                'user_id': User.objects.get_by_natural_key(request.user),
+                'dog_name': request.POST.get('dog_name').capitalize(),
+                'dog_breed_id': DogBreeds.objects.get(breed_name=request.POST.get('dog_breed')),
+                'dog_age': age,
+                'dog_weight': request.POST.get('dog_weight'),
+                'dog_image': dog_image
+            }
+            Dogs.objects.create(**temp_dict)
+            messages.success(request, mySuccessFactory.createProduct("add_dog").get_message())
+            return redirect('dog_walker-my_dogs_homepage')
+        else:
+            temp_dict = {
+                'user_id': User.objects.get_by_natural_key(request.user),
+                'dog_name': request.POST.get('dog_name').capitalize(),
+                'dog_breed_id': DogBreeds.objects.get(breed_name=request.POST.get('dog_breed')),
+                'dog_age': age,
+                'dog_weight': request.POST.get('dog_weight')
+            }
+            Dogs.objects.create(**temp_dict)
+            messages.error(request, myErrorFactory.createProduct("not_image").get_message())
+            messages.success(request, mySuccessFactory.createProduct("add_dog").get_message())
+            return redirect('dog_walker-my_dogs_homepage')
     return render(request, 'dog_walker/add_a_dog.html', content)
-
 
 @login_required
 def add_a_poi(request):
@@ -145,6 +184,26 @@ def add_a_poi(request):
     return render(request, 'dog_walker/add_a_poi.html', content)
 
 
+# @login_required
+# def my_dogs_homepage(request):
+#     current_user = request.user
+#     dog_list = Dogs.objects.filter(user_id=current_user)
+#     dogs = []
+#     for dog in dog_list:
+#         dogs.append(
+#             {
+#                 'name': dog.dog_name,
+#                 'breed': dog.dog_breed_id,
+#                 'age': dog.dog_age,
+#                 'image': dog.dog_image,
+#             },
+#         )
+#     content = {
+#         'title': 'My Dogs',
+#         'bg_image': 'http://www.hdnicewallpapers.com/Walls/Big/Dog/2_Cute_Dog_Puppy_5K_Wallpaper.jpg',
+#         'dogs': dogs,
+#     }
+#     return render(request, 'dog_walker/my_dogs_homepage.html', content)
 @login_required
 def my_dogs_homepage(request):
     current_user = request.user
@@ -166,7 +225,42 @@ def my_dogs_homepage(request):
     }
     return render(request, 'dog_walker/my_dogs_homepage.html', content)
 
-
+# @login_required
+# def dog_info(request, dog_name='default'):
+#     current_user = request.user
+#     selected_dog = Dogs.objects.filter(user_id=current_user, dog_name=dog_name)[0]
+#     dates = []
+#     exercise_today = 0
+#     for i in range(7, -1, -1):
+#         temp_date = date.today() - timedelta(days=i)
+#         total_exercise = 0
+#         for exercise in RecordedExercise.objects.filter(dog_id=selected_dog, exercise_date=temp_date):
+#             total_exercise += exercise.exercise_duration
+#         if i == 0:
+#             exercise_today = total_exercise
+#         day_info = {
+#             'date': temp_date,
+#             'exercise': total_exercise
+#         }
+#         dates.append(day_info)
+#     dog = {
+#         'name': selected_dog.dog_name,
+#         'breed': selected_dog.dog_breed_id,
+#         'age': selected_dog.dog_age,
+#         'weight': selected_dog.dog_weight,
+#         'image': selected_dog.dog_image,
+#         'avg_age': DogBreeds.objects.filter(breed_name=selected_dog.dog_breed_id)[0].breed_average_lifespan,
+#         'avg_weight': DogBreeds.objects.filter(breed_name=selected_dog.dog_breed_id)[0].breed_average_weight,
+#         'exercise_needs': DogBreeds.objects.filter(breed_name=selected_dog.dog_breed_id)[0].breed_daily_exercise_needs,
+#     }
+#     content = {
+#         'title': 'Dog Info',
+#         'bg_image': 'https://www.wallpaperflare.com/static/824/73/301/nature-path-blurred-green-wallpaper.jpg',
+#         'dog': dog,
+#         'dates': dates,
+#         'exercise_today': exercise_today,
+#     }
+#     return render(request, 'dog_walker/dog_info.html', content)
 @login_required
 def dog_info(request, dog_name='default'):
     current_user = request.user
@@ -204,8 +298,7 @@ def dog_info(request, dog_name='default'):
     }
     return render(request, 'dog_walker/dog_info.html', content)
 
-
-# @login_required
+@login_required
 def display_route(request):
     points = []
     if request.method == 'POST':
@@ -224,7 +317,7 @@ def display_route(request):
                         'middle_point_3') else None,
                 'walking_route_end': PointOfInterests.objects.filter(id=request.POST.get('end_point'))[0],
                 'walking_route_duration': request.POST.get('duration'),
-                'walking_route_type': 'Leisure',  # TODO Add both
+                'walking_route_type': request.POST.get('route_type'),
                 'user_id': User.objects.get_by_natural_key(request.user)
             }
             if not temp_dict['walking_route_name']:
@@ -339,7 +432,7 @@ def record_a_walk_saved_walking_route(request):
     return render(request, 'dog_walker/record_a_walk_saved_walking_route.html', content)
 
 
-# @login_required
+@login_required
 def walking_classes(request):
     # TODO Dont display the button if registered or full
     current_user = request.user
@@ -458,7 +551,7 @@ def dog_trainer_create_a_class(request):
         walking_class_subjects.notify()
         return redirect('dog_trainer-home')
 
-    route_list = WalkingRoute.objects.filter(user_id=current_user)
+    route_list = WalkingRoute.objects.filter(user_id=current_user, walking_route_type='Training')
     routes = []
     for route in route_list:
         routes.append(route.walking_route_name)
